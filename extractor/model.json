@@ -1,0 +1,22 @@
+{
+    "categories": [
+        {
+            "name": "category",
+            "parent": "parent category",
+            "productTypes": [
+                {
+                    "name": "product type, ex. bread",
+                    "products": [
+                        {
+                            "brand": "product brand",
+                            "name": ["allowed", "products"],
+                            "except": [ "not", "allowed", "products" ],
+                            "observations": ["observation"],
+                            "warnings": ["warning"]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
