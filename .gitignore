@@ -61,7 +61,8 @@ typings/
 .next
 
 # generated extractor files
-extractor/categories.json
-extractor/*.pdf
-extractor/observations.json
 extractor/cache-*.json
+extractor/categories.json
+extractor/observations.json
+extractor/items.json
+extractor/*.pdf
