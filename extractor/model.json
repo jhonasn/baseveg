@@ -1,22 +1,69 @@
 {
-    "categories": [
+  "_comment": "pdf first model",
+  "categories": [
+    {
+        "name": "category",
+        "parent": "parent category",
+        "item": [
         {
-            "name": "category",
-            "parent": "parent category",
-            "productTypes": [
-                {
-                    "name": "product type, ex. bread",
-                    "products": [
-                        {
-                            "brand": "product brand",
-                            "name": ["allowed", "products"],
-                            "except": [ "not", "allowed", "products" ],
-                            "observations": ["observation"],
-                            "warnings": ["warning"]
-                        }
-                    ]
-                }
-            ]
+          "name": "product type, ex. bread",
+          "options": [
+            {
+              "name": "product brand",
+              "only": ["allowed", "pfirstroducts"],
+              "except": ["not", "allowed", "products"],
+              "observations": "observation",
+              "warnings": "warnings"
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ],
+  "_comment": "first model transformation, changing names",
+  "categories": [
+    {
+        "name": "category",
+        "parent": "parent category",
+        "productTypes": [
+        {
+          "name": "product type, ex. bread",
+          "brands": [
+            {
+              "name": "product brand",
+              "only": ["allowed", "products"],
+              "except": ["not", "allowed", "products"],
+              "observations": "observation",
+              "warnings": "warnings"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "_comment": "transform model to entities",
+  "entities": {
+    "product": {
+      "name": "product name",
+      "type": "product type entity",
+      "brand": "brand entity",
+      "isAllowed": true
+    },
+    "productType": {
+      "name": "product type, ex. bread",
+      "categories": "product category, ex. cosmetic",
+      "products": ["product entities"]
+    },
+    "brand": {
+      "name": "brand name",
+      "_comment": "maybe observation and warnings should go in product entity",
+      "observations": "observation",
+      "warnings": "warnings",
+      "products": ["product entities"]
+    },
+    "category": {
+      "name": "category name",
+      "parent": "parent category entity"
+    }
+  }
 }

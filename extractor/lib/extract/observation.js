@@ -2,10 +2,10 @@ import { writeFileSync as write } from 'fs'
 import { nextStep, clearAccumulator } from './index.js'
 import { categories } from './category.js'
 
-export let observations = []
+export const observations = []
 let obsId = 0
 
-export default (accumulator, isLineEnd) => {
+export default (accumulator, isLineEnd, nextLines) => {
   if (isLineEnd) {
     const regexFilter = [
       // removes id and brand
@@ -43,9 +43,9 @@ export default (accumulator, isLineEnd) => {
   }
 
   const rgx = categories[0].name.replace(/\ /g, '.*')
-  if (accumulator.match(new RegExp(rgx))) {
-    adjustObservations()
-    write('./observations.json', JSON.stringify(observations, 1, 2))
+  if (nextLines.match(new RegExp(rgx))) {
+    const adjustedObservations = adjustObservations()
+    write('./observations.json', JSON.stringify(adjustedObservations, 1, 2))
     nextStep()
   }
 };
@@ -67,7 +67,7 @@ const adjustObservations = () => {
   const rgxOnlyAdd = '(esses são liberados)?(\\:)?'
   const rgxExceptAdd = '((\\()?(não são liberados)(\\))?(\\:)?)?'
 
-  observations = observations.map(o => {
+  return observations.map(o => {
     const warningItem = o.values.find(v => v.match(rgxWarning))
     let warnings = warningItem
       ? getAllAdjacentItems(o.values, warningItem, rgxWarning)
