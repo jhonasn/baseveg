@@ -2,14 +2,6 @@ import extractCategories from './category.js'
 import extractObservations from './observation.js'
 import extractItems, { finalizeItems } from './item.js'
 
-// pre-process json file to extraction needs
-export const preProcess = data => data.formImage.Pages.map((p, index) => ({
-  page: (index + 1),
-  content: p.Texts.map(
-    ({ x, y, R: [ { T } ] }) => ({ x, y, t: decodeURIComponent(T) })
-  )
-}))
-
 const steps = [ 'start', 'categories', 'observations', 'items' ]
 let step = steps[0] // current step
 let accumulator = ''
@@ -18,6 +10,7 @@ export const nextStep = () => {
   accumulator = ''
   const idx = steps.indexOf(step)
   step = steps[idx + 1]
+  if (step) console.log('step:', step)
 }
 
 export const clearAccumulator = () => accumulator = ''
@@ -27,7 +20,8 @@ export default data => {
 
   let lineStartX = null
   let previousX = null
-  data.forEach(({ page, content }) => content.forEach(({ x, y, t }, index) => {
+  let lastFill = null
+  data.forEach(({ page, content, fills }) => content.forEach(({ x, y, t }, index) => {
     const isLineEnd = x < 4 && y > 4
     const nextLines = getNextLines(content, index)
 
@@ -42,7 +36,12 @@ export default data => {
           extractObservations(accumulator, isLineEnd, nextLines)
         break
         case 'items':
-          extractItems(accumulator, isLineEnd, previousX, y, nextLines)
+          const currentFill = fills.filter(f => f.y <= y).pop()
+          const isItemLineEnd = currentFill && lastFill
+            ? currentFill.y > lastFill.y
+            : isLineEnd
+          extractItems(accumulator, isItemLineEnd, previousX, y, nextLines)
+          lastFill = currentFill
         break
       }
 

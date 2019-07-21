@@ -4,13 +4,13 @@
     {
         "name": "category",
         "parent": "parent category",
-        "item": [
+        "items": [
         {
           "name": "product type, ex. bread",
           "options": [
             {
               "name": "product brand",
-              "only": ["allowed", "pfirstroducts"],
+              "only": ["allowed", "products"],
               "except": ["not", "allowed", "products"],
               "observations": "observation",
               "warnings": "warnings"

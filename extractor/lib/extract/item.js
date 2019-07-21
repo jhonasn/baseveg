@@ -1,5 +1,4 @@
 import { writeFileSync as write } from 'fs'
-import { convertToRoman } from '../utils.js'
 import { nextStep, clearAccumulator } from './index.js'
 import { categories } from './category.js'
 
@@ -9,7 +8,7 @@ const columns = [
   11.9, // option 1
   21.6, // option 2
   31.3, // option 3
-  40.8 //option 4
+  40.8 // option 4
 ]
 let category = null
 let currentColumn = 0
@@ -60,6 +59,7 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
 }
 
 export const finalizeItems = () => {
+  console.log('items extracted, finalizing')
   const adjustedItems = adjustItems()
   write('./items.json', JSON.stringify(adjustedItems, 1, 2))
   nextStep()
@@ -69,13 +69,14 @@ const adjustItems = () => {
   const fixOptions = options => options.map(o => ({ name: o.name.trim() }))
     .filter(o => o.name.length > 1)
 
-  return items.map(i => ({ ...i, name: removeRoman(i.name).trim() }))
-    .reduce((arr, i) => {
-      const item = arr.find(ai => ai.name === i.name)
-      if (item) item.options = fixOptions(item.options.concat(i.options))
-      else arr.push({ ...i, options: fixOptions(i.options)})
-      return arr
-    }, [])
+  return items.reduce((arr, i) => {
+    const name = removeRoman(i.name)
+    let item = arr.find(ai => ai.name === name)
+
+    if (item) item.options = item.options.concat(fixOptions(i.options))
+    else arr.push({ ...i, name, options: fixOptions(i.options)})
+    return arr
+  }, [])
 }
 
 const findCategory = accumulator => categories.find(c =>
@@ -84,12 +85,8 @@ const findCategory = accumulator => categories.find(c =>
   )
 );
 
-const romanNumbers = Array.from(Array(50).keys(), i => convertToRoman(i + 1))
-const removeRoman = accumulator => {
-  const getRgx = n => new RegExp(`.*(?=\\ ${n}$)`)
-  const romanIn = romanNumbers.find(n =>
-    getRgx(n).test(accumulator))
-
-  if (romanIn) return accumulator.match(getRgx(romanIn))[0]
-  else return accumulator
+const removeRoman = text => {
+  let result = text.trim().match(/[IVXLCDM]+$/)
+  if (result) return text.substring(0, result.index).trim()
+  else return text
 }

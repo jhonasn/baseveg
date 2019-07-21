@@ -5,7 +5,7 @@ import {
 } from 'fs'
 import { basename, extname } from 'path'
 import PdfParser from 'pdf2json'
-import { preProcess } from './extract/index.js'
+import { prepareData } from './extract/prepare.js'
 
 export default async () => {
   const [,,path] = process.argv
@@ -28,7 +28,8 @@ export default async () => {
   })
   const data = await getPdfDataAsync()
 
-  const cache = preProcess(data)
+  const cache = prepareData(data)
+  write(pathCacheFile.replace('.json', '_original.json'), JSON.stringify(data, 1, 2))
   write(pathCacheFile, JSON.stringify(cache, 1, 2))
   return cache
 }
