@@ -1,6 +1,8 @@
 import { writeFileSync as write } from 'fs'
 import { nextStep, clearAccumulator } from './index.js'
 import { categories } from './category.js'
+import { observations } from './observation.js'
+import { textFixings } from './utils.js'
 
 export const items = []
 const columns = [
@@ -66,17 +68,52 @@ export const finalizeItems = () => {
 }
 
 const adjustItems = () => {
-  const fixOptions = options => options.map(o => ({ name: o.name.trim() }))
+  const fixOptions = options => options.map(o => ({ name: textFixings(o.name) }))
     .filter(o => o.name.length > 1)
 
   return items.reduce((arr, i) => {
-    const name = removeRoman(i.name)
+    const name = textFixings(removeRoman(i.name))
     let item = arr.find(ai => ai.name === name)
 
     if (item) item.options = item.options.concat(fixOptions(i.options))
-    else arr.push({ ...i, name, options: fixOptions(i.options)})
+    else {
+      item = { ...i, name, options: fixOptions(i.options) }
+      arr.push(item)
+    }
+
+    item = addObservation(item)
+    item.options = item.options.map(addObservation)
+
     return arr
   }, [])
+}
+
+const addObservation = item => {
+  const result = item.name.match(new RegExp(/(?<=\*\()\d+(?=\))/))
+
+  if (result) {
+    const id = Number(result)
+    const obs = { ...observations.find(o => o.id === id) }
+    obs.obsId = obs.id
+    delete obs.id
+
+    // remove observations in the item name
+    const rgxId = '\\*\\(\\d+\\)'
+    const removePhrases = [
+      new RegExp(`(\\ )?-.*ver.*em.*${rgxId}`, 'i'),
+      new RegExp(`(\\ )?-.*ver.*quais.*(são.*liberados.*)?(em.*)?${rgxId}`, 'i'),
+      new RegExp(`${rgxId}(\\ )?-.*quais.*produtos.*(não)?.*são.*liberados`, 'i'),
+      new RegExp(`${rgxId}(\\ )?-.*quais.*são.*os.*produtos.*liberados`, 'i'),
+      new RegExp(`(\\ )?-(\\ )?${rgxId}`, 'i'),
+      new RegExp(rgxId),
+    ]
+    const rgx = removePhrases.find(rgx => item.name.match(rgx))
+    item.name = item.name.replace(item.name.match(rgx)[0], '').trim()
+
+    // TODO: evaluate the need of extract observation in the item name
+
+    return { ...item, ...obs }
+  } else return item
 }
 
 const findCategory = accumulator => categories.find(c =>

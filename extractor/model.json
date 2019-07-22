@@ -1,5 +1,5 @@
 {
-  "_comment": "pdf first model",
+  "_comment": "pdf extraction model",
   "categories": [
     {
         "name": "category",
@@ -7,11 +7,13 @@
         "items": [
         {
           "name": "product type, ex. bread",
+          "observations": "observations about product type",
+          "warnings": "warnings about product type",
           "options": [
             {
               "name": "product brand",
-              "only": ["allowed", "products"],
-              "except": ["not", "allowed", "products"],
+              "only": "allowed products",
+              "except": "not allowed products",
               "observations": "observation",
               "warnings": "warnings"
             }
@@ -20,7 +22,7 @@
       ]
     }
   ],
-  "_comment": "first model transformation, changing names",
+  "_comment": "model transformation proposition, changing names and only and except types",
   "categories": [
     {
         "name": "category",
@@ -28,6 +30,8 @@
         "productTypes": [
         {
           "name": "product type, ex. bread",
+          "observations": "observations about product type",
+          "warnings": "warnings about product type",
           "brands": [
             {
               "name": "product brand",
@@ -41,7 +45,7 @@
       ]
     }
   ],
-  "_comment": "transform model to entities",
+  "_comment": "transform model to entities proposition",
   "entities": {
     "product": {
       "name": "product name",
@@ -52,6 +56,8 @@
     "productType": {
       "name": "product type, ex. bread",
       "categories": "product category, ex. cosmetic",
+      "observations": "observations about product type",
+      "warnings": "warnings about product type",
       "products": ["product entities"]
     },
     "brand": {

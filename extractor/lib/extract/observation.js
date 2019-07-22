@@ -1,8 +1,9 @@
 import { writeFileSync as write } from 'fs'
 import { nextStep, clearAccumulator } from './index.js'
 import { categories } from './category.js'
+import { textFixings } from './utils.js'
 
-export const observations = []
+export let observations = []
 let obsId = 0
 
 export default (accumulator, isLineEnd, nextLines) => {
@@ -44,8 +45,8 @@ export default (accumulator, isLineEnd, nextLines) => {
 
   const rgx = categories[0].name.replace(/\ /g, '.*')
   if (nextLines.match(new RegExp(rgx))) {
-    const adjustedObservations = adjustObservations()
-    write('./observations.json', JSON.stringify(adjustedObservations, 1, 2))
+    observations = adjustObservations()
+    write('./observations.json', JSON.stringify(observations, 1, 2))
     nextStep()
   }
 };
@@ -101,6 +102,18 @@ const adjustObservations = () => {
       new RegExp(`^(Exceto\\:|Exceto)${rgxExceptAdd}${rgxArticles}`, 'i'), '')
       .trim()).join('')
 
-    return { id: o.id, values, warnings, only, except }
+    const { id } = o
+    return removeEmptyProps({
+      id,
+      observations: textFixings(values),
+      warnings: textFixings(warnings),
+      only: textFixings(only),
+      except: textFixings(except),
+    })
   })
 }
+
+const removeEmptyProps = obj => Object.keys(obj)
+  .reduce((o, k) => obj[k]
+    ? { ...o, [k]: obj[k] }
+    : o, {})
