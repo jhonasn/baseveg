@@ -66,3 +66,4 @@ extractor/categories.json
 extractor/observations.json
 extractor/items.json
 extractor/*.pdf
+data.json

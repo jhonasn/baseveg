@@ -1,10 +1,9 @@
 import { writeFileSync as write } from 'fs'
 import { nextStep, clearAccumulator } from './index.js'
 import { categories } from './category.js'
-import { observations } from './observation.js'
 import { textFixings } from './utils.js'
 
-export const items = []
+export let items = []
 const columns = [
   2.5, // item
   11.9, // option 1
@@ -62,8 +61,8 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
 
 export const finalizeItems = () => {
   console.log('items extracted, finalizing')
-  const adjustedItems = adjustItems()
-  write('./items.json', JSON.stringify(adjustedItems, 1, 2))
+  items = adjustItems()
+  write('./items.json', JSON.stringify(items, 1, 2))
   nextStep()
 }
 
@@ -74,15 +73,18 @@ const adjustItems = () => {
   return items.reduce((arr, i) => {
     const name = textFixings(removeRoman(i.name))
     let item = arr.find(ai => ai.name === name)
+    let isItemAdd = false
 
     if (item) item.options = item.options.concat(fixOptions(i.options))
     else {
       item = { ...i, name, options: fixOptions(i.options) }
-      arr.push(item)
+      isItemAdd = true
     }
 
     item = addObservation(item)
     item.options = item.options.map(addObservation)
+
+    if (isItemAdd) arr.push(item)
 
     return arr
   }, [])
@@ -92,10 +94,7 @@ const addObservation = item => {
   const result = item.name.match(new RegExp(/(?<=\*\()\d+(?=\))/))
 
   if (result) {
-    const id = Number(result)
-    const obs = { ...observations.find(o => o.id === id) }
-    obs.obsId = obs.id
-    delete obs.id
+    const obsId = Number(result)
 
     // remove observations in the item name
     const rgxId = '\\*\\(\\d+\\)'
@@ -112,7 +111,7 @@ const addObservation = item => {
 
     // TODO: evaluate the need of extract observation in the item name
 
-    return { ...item, ...obs }
+    return { ...item, obsId }
   } else return item
 }
 

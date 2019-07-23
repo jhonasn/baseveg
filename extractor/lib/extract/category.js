@@ -16,7 +16,7 @@ export default (accumulator, isLineEnd, x) => {
         .concat(name.substring(i))
     })
 
-    const category = { name, productTypes: [] }
+    const category = { name }
 
     // is parent category, level 0
     if (x < 3) lastParent = name
