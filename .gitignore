@@ -65,5 +65,7 @@ extractor/cache-*.json
 extractor/categories.json
 extractor/observations.json
 extractor/items.json
+extractor/data.json
 extractor/*.pdf
-data.json
+
+app/src/data.json
