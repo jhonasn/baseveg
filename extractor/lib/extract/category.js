@@ -22,6 +22,11 @@ export default (accumulator, isLineEnd, x) => {
     if (x < 3) lastParent = name
     else category.parent = lastParent
 
+    const key = category.name.toLowerCase().replace(/\,/g, '').split(' ')
+    if (!key[0].includes('produto')) category.key = key[0]
+    else if (!key[1].includes('para')) category.key = key[1]
+    else category.key = key[2]
+
     categories.push(category)
     clearAccumulator()
   }

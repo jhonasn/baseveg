@@ -1,22 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ThemeProvider } from '@material-ui/styles'
-import theme from './theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Routes from './routes'
+import theme from './theme'
 import Menu from './menu/navbar'
-import Items from './items'
 import MenuBottom from './menu/bottom'
 import * as serviceWorker from './serviceWorker'
 import 'typeface-roboto'
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-    <CssBaseline/>
-    <Menu>
-      <Items />
-    </Menu>
-    <MenuBottom />
-  </ThemeProvider>,
+  <Router>
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Menu>
+        <Routes />
+      </Menu>
+      <MenuBottom />
+    </ThemeProvider>
+  </Router>,
   document.getElementById('root')
 )
 

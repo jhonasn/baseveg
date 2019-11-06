@@ -1,5 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
+import { Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
@@ -24,8 +25,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
+import LinkMUI from '@material-ui/core/Link'
+import { routes } from '../routes'
 
 const drawerWidth = 240
 
@@ -69,8 +70,8 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-    paddingTop: theme.spacing(9),
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -85,7 +86,16 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 0,
   },
   florist: {
+    float: 'left',
     marginRight: 5,
+    marginTop: 3,
+  },
+  title: {
+    flexGrow: 1,
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
   },
   search: {
     position: 'relative',
@@ -116,7 +126,7 @@ const useStyles = makeStyles(theme => ({
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
     transition: theme.transitions.create('width'),
-    width: '50%',
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
       width: 120,
       '&:focus': {
@@ -153,10 +163,17 @@ export default ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <LocalFloristIcon className={classes.florist} />
-          <Typography variant="h6" noWrap>
-            VegAjuda
-          </Typography>
+          <LinkMUI
+            className={classes.title}
+            color="inherit"
+            component={Link}
+            to={routes.items}
+          >
+            <LocalFloristIcon className={classes.florist} />
+            <Typography variant="h6" noWrap>
+              VegAjuda
+            </Typography>
+          </LinkMUI>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -188,32 +205,37 @@ export default ({ children }) => {
         </div>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button component={Link} to={routes.items}>
             <ListItemIcon><ListIcon /></ListItemIcon>
             <ListItemText primary="Lista" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component={Link} to={routes.favorites}>
             <ListItemIcon><FavoriteIcon /></ListItemIcon>
             <ListItemText primary="Favoritos" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component={Link} to={routes.recent}>
             <ListItemIcon><RestoreIcon /></ListItemIcon>
             <ListItemText primary="Recentes" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component={Link} to={routes.announcements}>
             <ListItemIcon><AnnouncementIcon /></ListItemIcon>
             <ListItemText primary="Avisos" />
           </ListItem>
-          <ListItem button>
-            <ListItemIcon><LinkIcon /></ListItemIcon>
-            <ListItemText primary="Facebook" />
+          <ListItem
+            button
+            component={LinkMUI}
+            href={routes.facebook}
+            target="_blank"
+          >
+              <ListItemIcon><LinkIcon /></ListItemIcon>
+              <ListItemText primary="Facebook" />
           </ListItem>
-          <ListItem button>
+          <ListItem button component={Link} to={routes.download}>
             <ListItemIcon><CloudDownloadIcon /></ListItemIcon>
-            <ListItemText primary="Baixar Pdf" />
+            <ListItemText primary="Baixar" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem button component={Link} to={routes.about}>
             <ListItemIcon><InfoIcon /></ListItemIcon>
             <ListItemText primary="Sobre" />
           </ListItem>
