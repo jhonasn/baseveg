@@ -34,24 +34,25 @@ const useStyles = makeStyles(theme => ({
       paddingRight: 0,
     },
   },
-  noMargin: {
+  banner: {
     margin: 0,
+    marginBottom: theme.spacing(2),
     borderRadius: 0,
     minHeight: '500px',
   },
-  noMarginContent: {
+  bannerContent: {
     padding: 0,
   },
 }))
 
-export default ({ category: c, item: i, noMargin = false }) => {
+export default ({ category: c, item: i, banner = false }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
 
   return (
     <Paper
       key={c.name}
-      className={clsx(classes.category, noMargin ? classes.noMargin : '')}
+      className={clsx(classes.category, banner ? classes.banner : '')}
       style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/img/${c.key}.jpg)`}}
     >
       <img
@@ -59,9 +60,9 @@ export default ({ category: c, item: i, noMargin = false }) => {
         alt="background"
       />
       <div className={classes.overlay} />
-      <Container className={clsx(classes.categoryContent, !noMargin ? '' : classes.noMarginContent)}>
+      <Container className={clsx(classes.categoryContent, !banner ? '' : classes.bannerContent)}>
         {!i
-          ? <Typography variant={!noMargin ? 'subtitle1' : 'h5'}>{c.name}</Typography>
+          ? <Typography variant={!banner ? 'subtitle1' : 'h5'}>{c.name}</Typography>
           : <>
             <Typography variant="subtitle1" gutterBottom>{i.name}</Typography>
             <Typography variant="caption" gutterBottom>{c.name}</Typography>
