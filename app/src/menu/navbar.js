@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { Link } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
@@ -140,13 +140,20 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ children }) => {
+  const history = useHistory()
   const classes = useStyles()
   const theme = useTheme()
+
   const [open, setOpen] = React.useState(false)
 
   const handleDrawerOpen = () => setOpen(true)
 
   const handleDrawerClose = () => setOpen(false)
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    history.push(routes.search.replace(':text', e.target.search.value))
+  }
 
   return (
     <div className={classes.root}>
@@ -177,19 +184,20 @@ export default ({ children }) => {
               VegAjuda
             </Typography>
           </LinkMUI>
-          <div className={classes.search}>
+          <form className={classes.search} onSubmit={handleSubmit}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
               placeholder="Search…"
+              name="search"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </form>
         </Toolbar>
       </AppBar>
       <Drawer
