@@ -4,12 +4,16 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles(theme => ({
   card: {
     marginBottom: theme.spacing(1),
   },
+  badge: {
+    width: '100%',
+  }
 }))
 
 export default ({ item: i, link }) => {
@@ -20,8 +24,10 @@ export default ({ item: i, link }) => {
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="subtitle2" gutterBottom>
-          {i.name} {i.options && `(${(i.options).length})`}
+          {i.name}
         </Typography>
+
+        <Typography variant="caption"></Typography>
 
         {i.observations && <>
           <Typography variant="body1">Obs:</Typography>
@@ -45,6 +51,23 @@ export default ({ item: i, link }) => {
       </CardContent>
     </Card>)
 
-    if (link) return <CardActionArea component={Link} to={link}>{card}</CardActionArea>
-    else return card
+    let resultCard = card
+
+    if (link) resultCard = (
+      <CardActionArea component={Link} to={link}>{card}</CardActionArea>)
+
+    const optionsLength = i.options && i.options.length
+
+    if (optionsLength) {
+      return (
+        <Badge
+          badgeContent={optionsLength}
+          color="error"
+          className={classes.badge}
+        >
+          {resultCard}
+        </Badge>)
+    }
+
+    return resultCard
 }

@@ -11,7 +11,7 @@ import Search from './search'
 
 export const routes = ({
   items: '/items',
-  options: '/options/:categoryIdx/:itemIdx',
+  options: '/options/:categoryId/:itemId',
   recent: '/recent',
   favorites: '/favorites',
   announcements: '/announcements',

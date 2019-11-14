@@ -6,8 +6,8 @@ import CardItem from './card-item'
 import { getOptions } from '../api'
 
 export default () => {
-  const { categoryIdx, itemIdx } = useParams()
-  const { category, item, options } = getOptions(categoryIdx, itemIdx)
+  const { categoryId, itemId } = useParams()
+  const { category, item, options } = getOptions(categoryId, itemId)
 
   return (
     <>

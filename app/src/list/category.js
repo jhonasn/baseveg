@@ -1,9 +1,13 @@
 import React from 'react'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
+import IconButton from '@material-ui/core/IconButton'
+import ArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Typography from '@material-ui/core/Typography'
+import FavoriteButton from '../favorites/button'
 
 const useStyles = makeStyles(theme => ({
   category: {
@@ -26,26 +30,18 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     backgroundColor: 'rgba(0,0,0,.3)',
   },
-  categoryContent: {
-    position: 'relative',
-    paddingTop: theme.spacing(3),
-    [theme.breakpoints.up('md')]: {
-      paddingTop: theme.spacing(8),
-      paddingRight: 0,
-    },
-  },
   banner: {
     margin: 0,
     marginBottom: theme.spacing(2),
     borderRadius: 0,
-    minHeight: '500px',
+    minHeight: theme.spacing(30),
   },
-  bannerContent: {
-    padding: 0,
+  content: {
+    zIndex: 0,
   },
 }))
 
-export default ({ category: c, item: i, banner = false }) => {
+export default ({ category: c, item: i, onOpen, isOpen = null, banner = false }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
 
@@ -60,14 +56,38 @@ export default ({ category: c, item: i, banner = false }) => {
         alt="background"
       />
       <div className={classes.overlay} />
-      <Container className={clsx(classes.categoryContent, !banner ? '' : classes.bannerContent)}>
-        {!i
-          ? <Typography variant={!banner ? 'subtitle1' : 'h5'}>{c.name}</Typography>
-          : <>
-            <Typography variant="subtitle1" gutterBottom>{i.name}</Typography>
-            <Typography variant="caption" gutterBottom>{c.name}</Typography>
-          </>}
+      <Grid
+        container
+        direction="row"
+        justify="flex-end"
+        alignItems="flex-start"
+      >
+        <Grid item xs={2} className={classes.content}>
+          {isOpen !== null &&
+            <IconButton color="inherit" onClick={onOpen}>
+              {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
+            </IconButton>}
+        </Grid>
+      </Grid>
 
-      </Container>
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="flex-end"
+      >
+        <Grid item xs={10} className={classes.content}>
+          {!i
+            ? <Typography variant={!banner ? 'subtitle1' : 'h5'}>{c.name}</Typography>
+            : <>
+              <Typography variant="subtitle1" gutterBottom>{i.name}</Typography>
+              <Typography variant="caption" gutterBottom>{c.name}</Typography>
+            </>}
+        </Grid>
+        {!!i &&
+          <Grid item xs className={classes.content}>
+            <FavoriteButton />
+          </Grid>}
+      </Grid>
     </Paper>)
 }

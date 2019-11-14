@@ -1,9 +1,9 @@
-import React from 'react'
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
 import indigo from '@material-ui/core/colors/indigo'
 import red from '@material-ui/core/colors/red'
 import lime from '@material-ui/core/colors/lime'
 
+// TODO: finish save the theme selected
 export const lightTheme = responsiveFontSizes(createMuiTheme({
   palette: {
     type: 'light',
