@@ -1,25 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Routes from './routes'
-import theme from './theme'
+import { ThemeProvider } from '@material-ui/styles'
+import { lightTheme, darkTheme } from './theme'
 import Menu from './menu/navbar'
 import MenuBottom from './menu/bottom'
 import * as serviceWorker from './serviceWorker'
 import 'typeface-roboto'
 
+const App = () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+  const [isLightTheme, setIsLightTheme] = useState(prefersDarkMode)
+
+  const changeTheme = (toLight) => setIsLightTheme(toLight)
+
+  return (
+    <Router>
+      <ThemeProvider theme={isLightTheme ? darkTheme : lightTheme}>
+        <CssBaseline/>
+        <Menu isLightTheme={isLightTheme} changeTheme={changeTheme}>
+          <Routes />
+        </Menu>
+        <MenuBottom />
+      </ThemeProvider>
+    </Router>
+  )
+}
+
 ReactDOM.render(
-  <Router>
-    <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <Menu>
-        <Routes />
-      </Menu>
-      <MenuBottom />
-    </ThemeProvider>
-  </Router>,
+  <App />,
   document.getElementById('root')
 )
 

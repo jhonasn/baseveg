@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
@@ -22,6 +22,8 @@ import AnnouncementIcon from '@material-ui/icons/Announcement'
 import SearchIcon from '@material-ui/icons/Search'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh'
+import BrightnessLowIcon from '@material-ui/icons/BrightnessLow'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -139,16 +141,17 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default ({ children }) => {
+export default ({ children, isLightTheme, changeTheme }) => {
   const history = useHistory()
   const classes = useStyles()
   const theme = useTheme()
-
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => setOpen(true)
 
   const handleDrawerClose = () => setOpen(false)
+
+  const handleChangeTheme = () => changeTheme(!isLightTheme)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -198,6 +201,9 @@ export default ({ children }) => {
               inputProps={{ 'aria-label': 'search' }}
             />
           </form>
+          <IconButton color="inherit" onClick={handleChangeTheme}>
+            {isLightTheme ? <BrightnessHighIcon /> : <BrightnessLowIcon />}
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
