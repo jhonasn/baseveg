@@ -18,12 +18,15 @@ const items = createItems()
 
 let lastCategoryKey = null
 let lastIdx = 0
-export const getNextItems = (categoryKey) => {
+export const resetCategory = () => lastCategoryKey = null
+export const getNextItems = categoryKey => {
   if (lastCategoryKey !== categoryKey) {
     lastIdx = items.findIndex(i => i.category === categoryKey)
   }
-  const nextItems = items.slice(lastIdx, (lastIdx + 50))
+  const nextItems = items.filter(i => i.category === categoryKey &&
+    i.key >= lastIdx && i.key <= (lastIdx + 50))
   lastIdx += 50
+  lastCategoryKey = categoryKey
   return nextItems
 }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import Categories from './list/categories'
 import Items from './list/items'
 import Options from './list/options'
 import Recent from './recent'
@@ -10,7 +11,8 @@ import About from './about'
 import Search from './search'
 
 export const routes = ({
-  items: '/items',
+  categories: '/categories',
+  items: '/items/:categoryId',
   options: '/options/:categoryId/:itemId',
   recent: '/recent',
   favorites: '/favorites',
@@ -24,7 +26,8 @@ export const routes = ({
 
 export default () => (
     <Switch>
-      <Route exact path="/"><Redirect to={routes.items} /></Route>
+      <Route exact path="/"><Redirect to={routes.categories} /></Route>
+      <Route path={routes.categories}><Categories /></Route>
       <Route path={routes.items}><Items /></Route>
       <Route path={routes.options}><Options /></Route>
       <Route path={routes.recent}><Recent /></Route>

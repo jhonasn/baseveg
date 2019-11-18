@@ -34,7 +34,7 @@ export default () => {
         label="Lista"
         icon={<ListIcon />}
         component={Link}
-        to={routes.items}
+        to={routes.categories}
       />
       <BottomNavigationAction
         label="Recentes"

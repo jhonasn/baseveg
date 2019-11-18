@@ -180,7 +180,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
             className={classes.title}
             color="inherit"
             component={Link}
-            to={routes.items}
+            to={routes.categories}
           >
             <LocalFloristIcon className={classes.florist} />
             <Typography variant="h6" noWrap>

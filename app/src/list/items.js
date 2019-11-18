@@ -1,108 +1,96 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
-import Fab from '@material-ui/core/Fab'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
+import Snackbar from '@material-ui/core/Snackbar'
+import Slide from '@material-ui/core/Slide'
+import Loading from '../components/loading'
 import Category from './category'
 import CardItem from './card-item'
 import debounce from 'lodash/debounce'
-import { getNextItems as getItems, categories } from '../api'
-
-const useStyles = makeStyles(theme => ({
-  loading: {
-    position: 'fixed',
-    top: theme.spacing(12),
-    zIndex: 1,
-    textAlign: 'center',
-  },
-  loadingFab: {
-    backgroundColor: theme.palette.background.paper,
-  }
-}))
+import { getNextItems as getItems, categories, resetCategory } from '../api'
 
 export default () => {
-  const theme = useTheme()
-  const classes = useStyles(theme)
+  // TODO: add floating button to go top
+  const { categoryId } = useParams()
 
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [categoryOpen, setCategoryOpen] = useState(null)
+  const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false)
+  const [openAllItemsLoaded, setOpenAllItemsLoaded] = useState(false)
 
-  const handleOpenCategory = (c) => {
-    setItems(getItems(c.key))
-    if (categoryOpen === c.key) setCategoryOpen(null)
-    else setCategoryOpen(c.key)
+  if (!categories) return <Loading />
+
+  const category = categories.find(c => c.key === categoryId)
+
+  const getMoreItems = () => {
+    const nextItems = getItems(categoryId)
+    if (nextItems.length < 50) setIsAllItemsLoaded(true)
+    const data = [...items, ...nextItems]
+    setItems(data)
+    setIsLoading(false)
   }
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+    getMoreItems(categoryId)
+
     return () => {
       window.onscroll = null
+      setItems([])
+      setIsLoading(false)
+      setIsAllItemsLoaded(false)
+      resetCategory()
     }
   }, [])
 
-  if (!categories) return <Container><CircularProgress /></Container>
 
   const infiniteScroll = debounce(() => {
-    // TODO: detect when comming close to last loaded card and load more items
     if (window.innerHeight + document.documentElement.scrollTop
         >= document.documentElement.offsetHeight) {
-      const data = [...items, ...getItems()]
-      setItems(data)
-      setIsLoading(false)
+      getMoreItems()
     }
   }, 100)
 
   window.onscroll = () => {
     if (window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight - 500 && !isLoading) {
-      setIsLoading(true)
+        >= document.documentElement.offsetHeight && !isLoading) {
+      if (isAllItemsLoaded) setOpenAllItemsLoaded(true)
+      else setIsLoading(true)
     }
     infiniteScroll()
   }
 
   return (
     <>
-      {isLoading &&
-        <Container className={classes.loading}>
-            <Fab className={classes.loadingFab}>
-              <CircularProgress color="secondary" className={classes.circle} />
-            </Fab>
-        </Container>}
+      {isLoading && <Loading />}
       <Category
-        category={{
-          name: 'Lista de produtos liberados do grupo Vegajuda - Veganismo',
-          key: 'vegajuda'
-        }}
+        category={category}
         banner
       />
       <Container fixed>
-        {categories && categories.map((c, cidx) => (
-          <React.Fragment key={cidx}>
-            <Category
-              category={c}
-              isOpen={categoryOpen === c.key}
-              onOpen={() => handleOpenCategory(c)}
-            />
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="flex-start"
-              spacing={1}
-            >
-              {categoryOpen === c.key &&
-                items.filter(i => i.category === c.key).map((i, iidx) => (
-                  <Grid item xs={12} key={`${cidx}-${iidx}`}>
-                    <CardItem
-                      item={i}
-                      link={`options/${c.key}/${i.key}`}
-                    />
-                  </Grid>))}
-            </Grid>
-          </React.Fragment>
-        ))}
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="flex-start"
+          spacing={1}
+        >
+          {items.map((i, idx) => (
+              <Grid item xs={12} key={idx}>
+                <CardItem
+                  item={i}
+                  link={`/options/${i.category}/${i.key}`}
+                />
+              </Grid>))}
+        </Grid>
       </Container>
+      <Snackbar
+        open={openAllItemsLoaded}
+        onClose={() => setOpenAllItemsLoaded(false)}
+        TransitionComponent={props => <Slide {...props} direction="up" />}
+        message={'Fim dos items dessa categoria'}
+      />
     </>
   )
 }

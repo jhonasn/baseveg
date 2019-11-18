@@ -8,6 +8,7 @@ import { getOptions } from '../api'
 export default () => {
   const { categoryId, itemId } = useParams()
   const { category, item, options } = getOptions(categoryId, itemId)
+  window.scrollTo(0, 0)
 
   return (
     <>

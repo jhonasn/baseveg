@@ -1,11 +1,10 @@
 import React from 'react'
 import clsx from 'clsx'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { Link } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
+import CardActionArea from '@material-ui/core/CardActionArea'
 import Paper from '@material-ui/core/Paper'
-import IconButton from '@material-ui/core/IconButton'
-import ArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import ArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import Typography from '@material-ui/core/Typography'
 import FavoriteButton from '../favorites/button'
 
@@ -15,9 +14,8 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
-    marginTop: theme.spacing(6),
-    // backgroundImage: `url(${process.env.PUBLIC_URL}/not_found.svg)`,
+    marginBottom: theme.spacing(2),
+    minHeight: theme.spacing(15),
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -41,11 +39,11 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default ({ category: c, item: i, onOpen, isOpen = null, banner = false }) => {
+export default ({ category: c, item: i, link, banner = false }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
 
-  return (
+  const category = (
     <Paper
       key={c.name}
       className={clsx(classes.category, banner ? classes.banner : '')}
@@ -56,19 +54,6 @@ export default ({ category: c, item: i, onOpen, isOpen = null, banner = false })
         alt="background"
       />
       <div className={classes.overlay} />
-      <Grid
-        container
-        direction="row"
-        justify="flex-end"
-        alignItems="flex-start"
-      >
-        <Grid item xs={2} className={classes.content}>
-          {isOpen !== null &&
-            <IconButton color="inherit" onClick={onOpen}>
-              {isOpen ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            </IconButton>}
-        </Grid>
-      </Grid>
 
       <Grid
         container
@@ -90,4 +75,11 @@ export default ({ category: c, item: i, onOpen, isOpen = null, banner = false })
           </Grid>}
       </Grid>
     </Paper>)
+
+    if (link) return (
+      <CardActionArea component={Link} to={link}>
+        {category}
+      </CardActionArea>)
+
+    return category
 }
