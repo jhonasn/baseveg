@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
@@ -23,13 +23,14 @@ export default () => {
 
   const category = categories.find(c => c.key === categoryId)
 
-  const getMoreItems = () => {
+  const getMoreItems = useCallback(() => {
+    debugger
     const nextItems = getItems(categoryId)
     if (nextItems.length < 50) setIsAllItemsLoaded(true)
     const data = [...items, ...nextItems]
     setItems(data)
-    setIsLoading(false)
-  }
+    if (isLoading) setIsLoading(false)
+  }, [categoryId, items, isLoading])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -42,7 +43,7 @@ export default () => {
       setIsAllItemsLoaded(false)
       resetCategory()
     }
-  }, [])
+  }, [categoryId])
 
 
   const infiniteScroll = debounce(() => {
