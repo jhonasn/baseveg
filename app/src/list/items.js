@@ -35,6 +35,7 @@ export default () => {
   useEffect(() => {
     window.scrollTo(0, 0)
     getMoreItems(categoryId)
+    window.onscroll = handleScroll
 
     return () => {
       window.onscroll = null
@@ -45,7 +46,6 @@ export default () => {
     }
   }, [categoryId])
 
-
   const infiniteScroll = debounce(() => {
     if (window.innerHeight + document.documentElement.scrollTop
         >= document.documentElement.offsetHeight) {
@@ -53,7 +53,7 @@ export default () => {
     }
   }, 100)
 
-  window.onscroll = () => {
+  const handleScroll = () => {
     if (window.innerHeight + document.documentElement.scrollTop
         >= document.documentElement.offsetHeight && !isLoading) {
       if (isAllItemsLoaded) setOpenAllItemsLoaded(true)

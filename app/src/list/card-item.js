@@ -80,7 +80,7 @@ export default ({ item: i, link, children, badge = true, width }) => {
     return (
       <Badge
         badgeContent={optionsLength}
-        color="error"
+        color="secondary"
         className={classes.badge}
       >
         {card}

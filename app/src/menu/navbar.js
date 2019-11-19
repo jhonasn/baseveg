@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
@@ -148,6 +148,8 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const theme = useTheme()
   const [open, setOpen] = useState(false)
 
+  const getSearchText = () => history.location.pathname.replace('/search/', '')
+
   const handleDrawerOpen = () => setOpen(true)
 
   const handleDrawerClose = () => setOpen(false)
@@ -156,11 +158,26 @@ export default ({ children, isLightTheme, changeTheme }) => {
 
   const handleSearchFocus = e => e.target.value = ''
 
+  const handleSearchBlur = e => {
+    const searchText = getSearchText()
+    if (!e.target.value && searchText) e.target.value = getSearchText()
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
     history.push(routes.search.replace(':text', e.target.search.value))
     e.target.search.blur()
   }
+
+  useEffect(() => {
+    const isInSeachRoute = history.location.pathname.includes('/search/')
+    const searchText = getSearchText()
+    const searchInput = document.querySelector('input[name=search]')
+
+    if (!isInSeachRoute) searchInput.value = ''
+    else if (searchText && searchInput.value !== searchText)
+      searchInput.value = searchText
+  }, [history.location.pathname])
 
   return (
     <div className={classes.root}>
@@ -196,7 +213,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Buscar..."
               name="search"
               classes={{
                 root: classes.inputRoot,
@@ -204,6 +221,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
               }}
               inputProps={{ 'aria-label': 'search' }}
               onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
             />
           </form>
           <IconButton color="inherit" onClick={handleChangeTheme}>
