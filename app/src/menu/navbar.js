@@ -142,6 +142,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ children, isLightTheme, changeTheme }) => {
+  // TODO: change persistent drawer nav to swipeable in mobile case
   const history = useHistory()
   const classes = useStyles()
   const theme = useTheme()
@@ -153,9 +154,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
 
   const handleChangeTheme = () => changeTheme(!isLightTheme)
 
+  const handleSearchFocus = e => e.target.value = ''
+
   const handleSubmit = e => {
     e.preventDefault()
     history.push(routes.search.replace(':text', e.target.search.value))
+    e.target.search.blur()
   }
 
   return (
@@ -199,6 +203,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onFocus={handleSearchFocus}
             />
           </form>
           <IconButton color="inherit" onClick={handleChangeTheme}>
@@ -222,7 +227,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
         </div>
         <Divider />
         <List>
-          <ListItem button component={Link} to={routes.items}>
+          <ListItem button component={Link} to={routes.categories}>
             <ListItemIcon><ListIcon /></ListItemIcon>
             <ListItemText primary="Lista" />
           </ListItem>

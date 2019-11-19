@@ -5,6 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Routes from './routes'
 import { ThemeProvider } from '@material-ui/styles'
+import indigo from '@material-ui/core/colors/indigo'
 import { lightTheme, darkTheme } from './theme'
 import Menu from './menu/navbar'
 import MenuBottom from './menu/bottom'
@@ -16,7 +17,17 @@ const App = () => {
 
   const [isLightTheme, setIsLightTheme] = useState(prefersDarkMode)
 
-  const changeTheme = (toLight) => setIsLightTheme(toLight)
+  const changeBarColor = isLight =>
+    document.querySelector('[name=theme-color]').content =
+      indigo[`${isLight ? 900 : 500}`]
+
+  const changeTheme = (toLight) => {
+    setIsLightTheme(toLight)
+    changeBarColor(toLight)
+  }
+
+  // set chrome bar color
+  changeBarColor(isLightTheme)
 
   return (
     <Router>

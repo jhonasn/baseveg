@@ -24,7 +24,6 @@ export default () => {
   const category = categories.find(c => c.key === categoryId)
 
   const getMoreItems = useCallback(() => {
-    debugger
     const nextItems = getItems(categoryId)
     if (nextItems.length < 50) setIsAllItemsLoaded(true)
     const data = [...items, ...nextItems]
