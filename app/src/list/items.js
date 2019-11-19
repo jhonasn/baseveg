@@ -11,6 +11,7 @@ import debounce from 'lodash/debounce'
 import { getNextItems as getItems, categories, resetCategory } from '../api'
 
 export default () => {
+  // TODO: fix show loading in nonsense times
   // TODO: add floating button to go top
   const { categoryId } = useParams()
 
@@ -82,7 +83,8 @@ export default () => {
                   item={i}
                   link={`/options/${i.category}/${i.key}`}
                 />
-              </Grid>))}
+              </Grid>
+          ))}
         </Grid>
       </Container>
       <Snackbar

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default ({ item }) => {
+export default ({ item, className }) => {
   // TODO: finish save favorites
   const [isFavorite, setIsFavorite] = useState(false)
   const theme = useTheme()
@@ -19,10 +19,11 @@ export default ({ item }) => {
   const handleFavorite = () => setIsFavorite(!isFavorite)
 
   return (
-    <IconButton color="inherit" onClick={handleFavorite}>
+    <IconButton color="inherit" onClick={handleFavorite} className={className}>
       {isFavorite
         ? <FavoriteIcon className={classes.favorite} />
-        : <FavoriteBorderIcon />}
+        : <FavoriteBorderIcon />
+      }
     </IconButton>
   )
 }

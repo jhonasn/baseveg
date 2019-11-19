@@ -67,19 +67,22 @@ export default ({ category: c, item: i, link, banner = false }) => {
             : <>
               <Typography variant="subtitle1" gutterBottom>{i.name}</Typography>
               <Typography variant="caption" gutterBottom>{c.name}</Typography>
-            </>}
+            </>
+          }
         </Grid>
         {!!i &&
           <Grid item xs className={classes.content}>
             <FavoriteButton />
-          </Grid>}
+          </Grid>
+        }
       </Grid>
     </Paper>)
 
     if (link) return (
       <CardActionArea component={Link} to={link}>
         {category}
-      </CardActionArea>)
+      </CardActionArea>
+    )
 
     return category
 }

@@ -26,5 +26,6 @@ export default () => {
       <Fab className={classes.loadingFab}>
         <CircularProgress color="secondary" className={classes.circle} />
       </Fab>
-    </Container>)
+    </Container>
+  )
 }

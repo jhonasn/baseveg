@@ -21,6 +21,7 @@ const useStyles = makeStyles({
 export default () => {
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
+
   return (
     <BottomNavigation
       value={value}
@@ -48,5 +49,6 @@ export default () => {
         component={Link}
         to={routes.favorites}
       />
-    </BottomNavigation>)
+    </BottomNavigation>
+  )
 }

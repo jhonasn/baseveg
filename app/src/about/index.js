@@ -69,5 +69,6 @@ export default () => {
           'Ashim D’Silva',
         ].map(name => <li><Typography variant="body2">{name}</Typography></li>)}
       </ul>
-    </Container>)
+    </Container>
+  )
 }
