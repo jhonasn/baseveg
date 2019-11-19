@@ -25,15 +25,16 @@ export const routes = ({
 })
 
 export default () => (
-    <Switch>
-      <Route exact path="/"><Redirect to={routes.categories} /></Route>
-      <Route path={routes.categories}><Categories /></Route>
-      <Route path={routes.items}><Items /></Route>
-      <Route path={routes.options}><Options /></Route>
-      <Route path={routes.recent}><Recent /></Route>
-      <Route path={routes.favorites}><Favorites /></Route>
-      <Route path={routes.announcements}><Announcements /></Route>
-      <Route path={routes.download}><Download /></Route>
-      <Route path={routes.about}><About /></Route>
-      <Route path={routes.search}><Search /></Route>
-    </Switch>)
+  <Switch>
+    <Route exact path="/"><Redirect to={routes.categories} /></Route>
+    <Route path={routes.categories}><Categories /></Route>
+    <Route path={routes.items}><Items /></Route>
+    <Route path={routes.options}><Options /></Route>
+    <Route path={routes.recent}><Recent /></Route>
+    <Route path={routes.favorites}><Favorites /></Route>
+    <Route path={routes.announcements}><Announcements /></Route>
+    <Route path={routes.download}><Download /></Route>
+    <Route path={routes.about}><About /></Route>
+    <Route path={routes.search}><Search /></Route>
+  </Switch>
+)
