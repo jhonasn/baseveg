@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -42,16 +43,13 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+  appBarAbove: {
+    zIndex: 1201,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    [theme.breakpoints.only('xs')]: {
+      marginRight: 0,
+    },
   },
   hide: {
     display: 'none',
@@ -78,25 +76,21 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: -drawerWidth,
     [theme.breakpoints.only('xs')]: {
       paddingTop: theme.spacing(7),
     },
   },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
-  },
-  florist: {
-    float: 'left',
-    marginRight: 5,
-    marginTop: 3,
-  },
   title: {
     flexGrow: 1,
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(1.5, 1.5, 1.5, 0),
+  },
+  brandIcon: {
+    float: 'left',
+    marginRight: theme.spacing(1),
+  },
+  titleText: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -142,10 +136,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ children, isLightTheme, changeTheme }) => {
-  // TODO: change persistent drawer nav to swipeable in mobile case
   const history = useHistory()
   const classes = useStyles()
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [open, setOpen] = useState(false)
 
   const getSearchText = () => history.location.pathname.replace('/search/', '')
@@ -184,7 +178,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarAbove]: !isMobile,
         })}
       >
         <Toolbar>
@@ -203,8 +197,8 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.categories}
           >
-            <LocalFloristIcon className={classes.florist} />
-            <Typography variant="h6" noWrap>
+            <LocalFloristIcon className={classes.brandIcon} />
+            <Typography variant="h6" noWrap className={classes.titleText}>
               VegAjuda
             </Typography>
           </LinkMUI>
@@ -231,12 +225,11 @@ export default ({ children, isLightTheme, changeTheme }) => {
       </AppBar>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
+        variant={isMobile ? 'temporary' : 'permanent'}
         anchor="left"
         open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
+        onClose={() => setOpen(false)}
+        classes={{ paper: classes.drawerPaper }}
       >
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
@@ -282,9 +275,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
         </List>
       </Drawer>
       <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
+        className={classes.content}
       >
         {children}
       </main>
