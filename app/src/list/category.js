@@ -10,7 +10,7 @@ import FavoriteButton from '../favorites/button'
 
 const useStyles = makeStyles(theme => ({
   category: {
-    padding: theme.spacing(3, 2),
+    padding: theme.spacing(1, 2, 3),
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default ({ category: c, item: i, link, banner = false }) => {
+export default ({ category: c, item: i, link, banner = false, noType = false }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
 
@@ -55,6 +55,23 @@ export default ({ category: c, item: i, link, banner = false }) => {
       />
       <div className={classes.overlay} />
 
+      {!noType &&
+        <Grid
+          container
+          direction="row"
+          justify="flex-end"
+          alignItems="flex-end"
+        >
+          <Grid item className={classes.content}>
+            <Typography variant="caption">
+              {c && i
+                ? <>Produto <small>(item)</small></>
+                : 'Categoria'
+              }
+            </Typography>
+          </Grid>
+        </Grid>
+      }
       <Grid
         container
         direction="row"

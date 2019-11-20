@@ -1,12 +1,19 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
+import clsx from 'clsx'
+import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Badge from '@material-ui/core/Badge';
 import Typography from '@material-ui/core/Typography'
+import red from '@material-ui/core/colors/red'
+import lightBlue from '@material-ui/core/colors/lightBlue'
+import orange from '@material-ui/core/colors/orange'
+import teal from '@material-ui/core/colors/teal'
+import FavoriteButton from '../favorites/button'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -17,57 +24,127 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   cardContent: {
-    padding: [theme.spacing(1), '!important'],
+    padding: [theme.spacing(0.5, 1, 1), '!important'],
   },
   cardActions: {
     maxWidth: '100%',
   },
+  actionsTitle: {
+    marginTop: theme.spacing(1),
+  },
+  actionsWithTitle: {
+    paddingTop: 0,
+  },
+  contentWithActionsTitle: {
+    paddingBottom: [0, '!important'],
+  },
+  warning: {
+    color: red[500],
+  },
+  only: {
+    color: lightBlue[500],
+  },
+  except: {
+    color: orange[500],
+  },
+  observation: {
+    color: teal[500],
+  },
 }))
 
-export default ({ item: i, link, children, badge = true, width }) => {
+export default ({
+  item: i, link, children, width, actionsTitle, isOption, badge = true,
+}) => {
   const theme = useTheme()
   const classes = useStyles(theme)
+  const history = useHistory()
+
+  const handleLinkClick = e => {
+    if (e.target.parentNode.parentNode.parentNode.className.includes('MuiCardActionArea-root'))
+      history.push(link)
+  }
 
   const cardContent = (
     <>
-      <Typography variant="subtitle1">
-        {i.name}
-      </Typography>
+      <Grid
+        container
+        direction="row"
+        justify="flex-end"
+        alignItems="flex-end"
+      >
+        <Grid item className={classes.content}>
+          <Typography variant="caption">
+            {isOption
+              ? <>Marca <small>(opção)</small></>
+              : <>Produto <small>(item)</small></>
+            }
+          </Typography>
+        </Grid>
+      </Grid>
 
-      <Typography variant="caption"></Typography>
-
-      {i.observations && <>
-        <Typography variant="body1">Obs:</Typography>
-        <Typography variant="body2" gutterBottom>{i.observations}</Typography>
-      </>}
+      <Grid
+        container
+        direction="row"
+        justify="space-between"
+        alignItems="baseline"
+      >
+        <Grid item xs={11} className={classes.content}>
+          <Typography variant="subtitle1">
+            {i.name}
+          </Typography>
+        </Grid>
+        <Grid item xs={1}>
+          <FavoriteButton noPad />
+        </Grid>
+      </Grid>
 
       {i.warnings && <>
-        <Typography variant="body1">Atenção:</Typography>
-        <Typography variant="body2" gutterBottom>{i.warnings}</Typography>
+        <Typography variant="body2" className={classes.warning} gutterBottom>
+          <strong>Atenção:</strong> {i.warnings}
+        </Typography>
       </>}
 
       {i.only && <>
-        <Typography variant="body1">Somente:</Typography>
-        <Typography variant="body2" gutterBottom>{i.only}</Typography>
+        <Typography variant="body2" className={classes.only} gutterBottom>
+          <strong>Somente:</strong> {i.only}
+        </Typography>
       </>}
 
       {i.except && <>
-        <Typography variant="body1">Exceto:</Typography>
-        <Typography variant="body2" gutterBottom>{i.except}</Typography>
+        <Typography variant="body2" className={classes.except} gutterBottom>
+          <strong>Exceto:</strong> {i.except}
+        </Typography>
       </>}
+
+      {i.observations && <>
+        <Typography variant="body2" className={classes.observation} gutterBottom>
+          <strong>Obs:</strong> {i.observations}
+        </Typography>
+      </>}
+
+      {!!actionsTitle &&
+        <Typography color="textSecondary" className={classes.actionsTitle}>
+          {actionsTitle}
+        </Typography>}
     </>
   )
 
   const card = (
     <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>
+      <CardContent
+        className={clsx(classes.cardContent,
+          actionsTitle ? classes.contentWithActionsTitle : '')}
+      >
         {!link
           ? cardContent
-          : <CardActionArea component={Link} to={link}>{cardContent}</CardActionArea>
+          : <CardActionArea onClick={handleLinkClick}>{cardContent}</CardActionArea>
         }
       </CardContent>
       {!!children &&
-        <CardActions disableSpacing className={classes.cardActions}>
+        <CardActions
+          disableSpacing
+          className={clsx(classes.cardActions, actionsTitle ? classes.actionsWithTitle : '')}
+        >
           {children}
         </CardActions>
       }

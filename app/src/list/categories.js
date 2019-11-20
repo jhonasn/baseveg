@@ -14,6 +14,7 @@ export default () => {
           name: 'Lista de produtos liberados do grupo Vegajuda - Veganismo',
           key: 'vegajuda'
         }}
+        noType
         banner
       />
       <Container fixed>

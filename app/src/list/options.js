@@ -15,7 +15,7 @@ export default () => {
       <Category category={category} item={item} banner />
       <Container>
         {options.map((o, idx) => (
-          <CardItem key={idx} item={o} />
+          <CardItem key={idx} item={o} isOption />
         ))}
       </Container>
     </>

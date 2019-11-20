@@ -28,6 +28,9 @@ const useStyles = makeStyles(theme => ({
   notFountPaper: {
     padding: theme.spacing(2),
   },
+  brandsDescription: {
+    display: 'block',
+  },
   chipContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -35,10 +38,6 @@ const useStyles = makeStyles(theme => ({
     '& > *': {
       margin: theme.spacing(0.5),
     },
-  },
-  npx: {
-    paddingLeft: 0,
-    paddingRight: 0,
   },
   chip: {
     maxWidth: 148,
@@ -147,6 +146,9 @@ export default () => {
                 item={{ ...i, name: <SearchResultText result={i} /> }}
                 link={`/options/${i.category}/${i.key}`}
                 badge={false}
+                actionsTitle={
+                  i.options.length ? <>Marcas <small>(opções)</small>:</> : null
+                }
               >
                 <div className={classes.chipContainer}>
                   {i.options.map(o => (
@@ -164,7 +166,7 @@ export default () => {
                         deleteIcon={
                           <>
                             {o.isOverflowing && <MoreIcon className={classes.moreIcon} />}
-                            <FavoriteButton className={classes.npx} />
+                            <FavoriteButton noPad />
                           </>
                         }
                         onDelete={() => {}}
