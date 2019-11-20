@@ -5,6 +5,9 @@ import clsx from 'clsx'
 import debounce from 'lodash/debounce'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Hidden from '@material-ui/core/Hidden'
 import Chip from '@material-ui/core/Chip'
 import Tooltip from '@material-ui/core/Tooltip'
 import Snackbar from '@material-ui/core/Snackbar'
@@ -22,6 +25,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
   },
+  notFountPaper: {
+    padding: theme.spacing(2),
+  },
   chipContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -38,10 +44,17 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 148,
   },
   chipLabel: {
-    marginRight: '10px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
+  },
+  moreIcon: {
+    fontSize: 15,
+  },
+  textMeasure: {
+    display: 'none',
+    visibility: 'hidden',
+    fontSize: '0.8125rem',
   },
   infoSnack: {
     backgroundColor: theme.palette.primary.main,
@@ -79,28 +92,29 @@ export default () => {
   useEffect(() => {
     // TODO: in future verify if the message was already shown before open it
     setShowLongpressInfo(true)
-    if (!result.length) setResult(query(search))
     return () => window.onscroll = null
   }, [])
 
   useEffect(() => {
-    // add overflowing options more icon
-    if (result.length) {
-      const options = result.reduce((arr, c) => [...arr, ...c.items], [])
-        .reduce((arr, i) => i && i.options ? [...arr, ...i.options] : arr, [])
+    window.scrollTo(0, 0)
+    if (search) setResult(queryWithOverflowDetection())
+  }, [search])
 
-      // already set
-      if (options.some(o => o.isOverflowing)) return
+  const queryWithOverflowDetection = () => {
+    const result = query(search)
+    const txt = document.querySelector('#text-measure')
+    txt.style.display = 'inline-block'
 
-      options.forEach(o => {
-        const el = document.querySelector(`#option-${o.key}`)
-        o.isOverflowing = el.clientWidth < el.scrollWidth ||
-          el.clientHeight < el.scrollHeight
-      })
+    result.forEach(c => c.items.forEach(i => i.options.forEach(o => {
+      txt.innerHTML = ''
+      o.name.forEach(({ bold, content }) =>
+        txt.innerHTML += bold ? `<b>${content}</b>` : content)
+      o.isOverflowing = txt.offsetWidth > 110
+    })))
+    txt.style.display = 'none'
 
-      setResult(result)
-    }
-  }, [result])
+    return result
+  }
 
   window.onscroll = debounce(() => {
     if (window.innerHeight + document.documentElement.scrollTop
@@ -136,7 +150,12 @@ export default () => {
               >
                 <div className={classes.chipContainer}>
                   {i.options.map(o => (
-                    <Tooltip key={o.key} title={<SearchResultText result={o} />}>
+                    <Tooltip
+                      key={o.key}
+                      disableFocusListener
+                      disableTouchListener
+                      title={<SearchResultText result={o} />}
+                    >
                       <Chip
                         id={`option-${o.key}`}
                         className={classes.chip}
@@ -144,7 +163,7 @@ export default () => {
                         color="primary"
                         deleteIcon={
                           <>
-                            {o.isOverflowing && <MoreIcon />}
+                            {o.isOverflowing && <MoreIcon className={classes.moreIcon} />}
                             <FavoriteButton className={classes.npx} />
                           </>
                         }
@@ -160,6 +179,13 @@ export default () => {
           ))}
         </Grid>
       ))}
+      {!result.length &&
+        <Paper className={classes.notFountPaper}>
+          <Typography variant="body1">
+            Nenhum resultado encontrado na busca de "{search}"
+          </Typography>
+        </Paper>
+      }
       <Snackbar
         open={showEndOfItems}
         onClose={() => setShowEndOfItems(false)}
@@ -167,24 +193,29 @@ export default () => {
         TransitionComponent={props => <Slide {...props} direction="up" />}
         message={'Fim dos resultados da busca'}
       />
-      <Snackbar
-        open={showLongpressInfo}
-        onClose={handleInfoClose}
-        TransitionComponent={props => <Slide {...props} direction="up" />}
-        message={
-          <span className={classes.infoMessage}>
-            <InfoIcon className={clsx(classes.icon, classes.infoIcon)} />
-            Para visualizar todo conteúdo de uma opção (marca),
-            basta pressionar e segurar
-            <IconButton key="close" color="inherit" onClick={handleInfoClose}>
-              <CloseIcon className={classes.icon} />
-            </IconButton>
-          </span>
-        }
-        ContentProps={{
-          classes: { root: classes.infoSnack }
-        }}
-      />
+      <Hidden mdUp>
+        <Snackbar
+          style={!(showLongpressInfo && result.length) ? { display: 'none' } : {}}
+          open={showLongpressInfo && result.length}
+          onClose={handleInfoClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          TransitionComponent={props => <Slide {...props} direction="up" />}
+          message={
+            <span className={classes.infoMessage}>
+              <InfoIcon className={clsx(classes.icon, classes.infoIcon)} />
+              Para visualizar todo conteúdo de uma opção (marca),
+              basta tocar nela
+              <IconButton key="close" color="inherit" onClick={handleInfoClose}>
+                <CloseIcon className={classes.icon} />
+              </IconButton>
+            </span>
+          }
+          ContentProps={{
+            classes: { root: classes.infoSnack }
+          }}
+        />
+      </Hidden>
+      <span id="text-measure" className={classes.textMeasure} />
     </Container>
   )
 }

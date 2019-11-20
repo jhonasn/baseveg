@@ -91,6 +91,7 @@ export default () => {
         open={openAllItemsLoaded}
         onClose={() => setOpenAllItemsLoaded(false)}
         TransitionComponent={props => <Slide {...props} direction="up" />}
+        autoHideDuration={2000}
         message={'Fim dos items dessa categoria'}
       />
     </>
