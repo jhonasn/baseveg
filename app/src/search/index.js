@@ -80,6 +80,7 @@ const SearchResultText = ({ result }) => (
 )
 
 export default () => {
+  // TODO: add category expand/collapse option
   const { text: search } = useParams()
   const theme = useTheme()
   const classes = useStyles(theme)

@@ -182,7 +182,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
         })}
       >
         <Toolbar>
-          <IconButton
+          {isMobile && <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
@@ -190,7 +190,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>}
           <LinkMUI
             className={classes.title}
             color="inherit"
