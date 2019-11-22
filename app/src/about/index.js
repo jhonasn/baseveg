@@ -16,6 +16,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default () => {
+  // TODO: add link for each used image
   const theme = useTheme()
   const classes = useStyles(theme)
 

@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ category: c, item: i, link, banner = false, noType = false }) => {
+  // TODO: create category images for each screen size (xs, sm, md, lg, xl)
   const theme = useTheme()
   const classes = useStyles(theme)
 
