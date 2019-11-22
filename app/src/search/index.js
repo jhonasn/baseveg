@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import clsx from 'clsx'
@@ -95,12 +95,7 @@ export default () => {
     return () => window.onscroll = null
   }, [])
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    if (search) setResult(queryWithOverflowDetection())
-  }, [search])
-
-  const queryWithOverflowDetection = () => {
+  const queryWithOverflowDetection = useCallback(() => {
     const result = query(search)
     const txt = document.querySelector('#text-measure')
     txt.style.display = 'inline-block'
@@ -114,7 +109,7 @@ export default () => {
     txt.style.display = 'none'
 
     return result
-  }
+  }, [search])
 
   window.onscroll = debounce(() => {
     if (window.innerHeight + document.documentElement.scrollTop
@@ -123,6 +118,11 @@ export default () => {
   }, 100)
 
   const handleInfoClose = () => setShowLongpressInfo(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if (search) setResult(queryWithOverflowDetection())
+  }, [search, queryWithOverflowDetection])
 
   return (
     <Container className={classes.root}>

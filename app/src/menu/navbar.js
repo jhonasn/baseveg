@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
@@ -12,7 +12,6 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
-import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import RestoreIcon from '@material-ui/icons/Restore'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import ListIcon from '@material-ui/icons/List'
@@ -30,7 +29,6 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import LinkMUI from '@material-ui/core/Link'
-import SvgIcon from '@material-ui/core/SvgIcon'
 import { routes } from '../routes'
 
 const drawerWidth = 240
@@ -152,7 +150,9 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [open, setOpen] = useState(false)
 
-  const getSearchText = () => history.location.pathname.replace('/search/', '')
+  const getSearchText = useCallback(() =>
+    history.location.pathname.replace('/search/', ''),
+  [history.location.pathname])
 
   const handleDrawerOpen = () => setOpen(true)
 
@@ -181,7 +181,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
     if (!isInSeachRoute) searchInput.value = ''
     else if (searchText && searchInput.value !== searchText)
       searchInput.value = searchText
-  }, [history.location.pathname])
+  }, [history.location.pathname, getSearchText])
 
   return (
     <div className={classes.root}>
@@ -207,7 +207,11 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.categories}
           >
-            <img src={`${process.env.PUBLIC_URL}/logo.svg`} className={classes.brandIcon} />
+            <img
+              alt="logo"
+              className={classes.brandIcon}
+              src={`${process.env.PUBLIC_URL}/logo.svg`}
+            />
             <Typography variant="h6" noWrap className={classes.titleText}>
               VegAjuda
             </Typography>

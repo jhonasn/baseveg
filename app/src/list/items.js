@@ -32,6 +32,22 @@ export default () => {
     if (isLoading) setIsLoading(false)
   }, [categoryId, items, isLoading])
 
+  const infiniteScroll = debounce(() => {
+    if (window.innerHeight + document.documentElement.scrollTop
+        >= document.documentElement.offsetHeight) {
+      getMoreItems()
+    }
+  }, 100)
+
+  const handleScroll = useCallback(() => {
+    if (window.innerHeight + document.documentElement.scrollTop
+        >= document.documentElement.offsetHeight && !isLoading) {
+      if (isAllItemsLoaded) setOpenAllItemsLoaded(true)
+      else setIsLoading(true)
+    }
+    infiniteScroll()
+  }, [isLoading, isAllItemsLoaded, infiniteScroll])
+
   useEffect(() => {
     window.scrollTo(0, 0)
     getMoreItems(categoryId)
@@ -44,23 +60,7 @@ export default () => {
       setIsAllItemsLoaded(false)
       resetCategory()
     }
-  }, [categoryId])
-
-  const infiniteScroll = debounce(() => {
-    if (window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight) {
-      getMoreItems()
-    }
-  }, 100)
-
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight && !isLoading) {
-      if (isAllItemsLoaded) setOpenAllItemsLoaded(true)
-      else setIsLoading(true)
-    }
-    infiniteScroll()
-  }
+  }, [categoryId, getMoreItems, handleScroll])
 
   return (
     <>
