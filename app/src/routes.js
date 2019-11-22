@@ -6,6 +6,7 @@ import Options from './list/options'
 import Recent from './recent'
 import Favorites from './favorites'
 import Announcements from './announcements'
+import Ingredients from './ingredients'
 import Download from './download'
 import About from './about'
 import Search from './search'
@@ -17,6 +18,7 @@ export const routes = ({
   recent: '/recent',
   favorites: '/favorites',
   announcements: '/announcements',
+  ingredients: '/ingredients',
   download: '/download',
   about: '/about',
   search: '/search/:text',
@@ -33,6 +35,7 @@ export default () => (
     <Route path={routes.recent}><Recent /></Route>
     <Route path={routes.favorites}><Favorites /></Route>
     <Route path={routes.announcements}><Announcements /></Route>
+    <Route path={routes.ingredients}><Ingredients /></Route>
     <Route path={routes.download}><Download /></Route>
     <Route path={routes.about}><About /></Route>
     <Route path={routes.search}><Search /></Route>

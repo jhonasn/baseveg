@@ -20,6 +20,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import LinkIcon from '@material-ui/icons/Link'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import AnnouncementIcon from '@material-ui/icons/Announcement'
+import ColorizeIcon from '@material-ui/icons/Colorize'
 import SearchIcon from '@material-ui/icons/Search'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -29,6 +30,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import LinkMUI from '@material-ui/core/Link'
+import SvgIcon from '@material-ui/core/SvgIcon'
 import { routes } from '../routes'
 
 const drawerWidth = 240
@@ -88,7 +90,15 @@ const useStyles = makeStyles(theme => ({
   },
   brandIcon: {
     float: 'left',
-    marginRight: theme.spacing(1),
+    [theme.breakpoints.only('xs')]: {
+      width: 26,
+      height: 32,
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 33,
+      height: 40,
+      marginRight: theme.spacing(1),
+    },
   },
   titleText: {
     display: 'none',
@@ -197,7 +207,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.categories}
           >
-            <LocalFloristIcon className={classes.brandIcon} />
+            <img src={`${process.env.PUBLIC_URL}/logo.svg`} className={classes.brandIcon} />
             <Typography variant="h6" noWrap className={classes.titleText}>
               VegAjuda
             </Typography>
@@ -238,37 +248,77 @@ export default ({ children, isLightTheme, changeTheme }) => {
         </div>
         <Divider />
         <List>
-          <ListItem button component={Link} to={routes.categories}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.categories}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><ListIcon /></ListItemIcon>
             <ListItemText primary="Lista" />
           </ListItem>
-          <ListItem button component={Link} to={routes.favorites}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.favorites}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><FavoriteIcon /></ListItemIcon>
             <ListItemText primary="Favoritos" />
           </ListItem>
-          <ListItem button component={Link} to={routes.recent}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.recent}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><RestoreIcon /></ListItemIcon>
             <ListItemText primary="Recentes" />
           </ListItem>
-          <ListItem button component={Link} to={routes.announcements}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.announcements}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><AnnouncementIcon /></ListItemIcon>
             <ListItemText primary="Avisos" />
+          </ListItem>
+          <ListItem
+            button
+            component={Link}
+            to={routes.ingredients}
+            onClick={handleDrawerClose}
+          >
+            <ListItemIcon><ColorizeIcon /></ListItemIcon>
+            <ListItemText primary="Ingredientes" />
           </ListItem>
           <ListItem
             button
             component={LinkMUI}
             href={routes.facebook}
             target="_blank"
+            onClick={handleDrawerClose}
           >
               <ListItemIcon><LinkIcon /></ListItemIcon>
               <ListItemText primary="Facebook" />
           </ListItem>
-          <ListItem button component={Link} to={routes.download}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.download}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><CloudDownloadIcon /></ListItemIcon>
             <ListItemText primary="Baixar" />
           </ListItem>
           <Divider />
-          <ListItem button component={Link} to={routes.about}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.about}
+            onClick={handleDrawerClose}
+          >
             <ListItemIcon><InfoIcon /></ListItemIcon>
             <ListItemText primary="Sobre" />
           </ListItem>

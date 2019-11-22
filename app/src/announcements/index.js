@@ -47,7 +47,7 @@ export default () => {
       ` para que a lista seja editada.`
     ],
     `Entre também em contato com as empresas e envie as
-    respostas dos SACs para os administradores do grupo.`
+    respostas dos SACs para os administradores do grupo.`,
   ]
 
   return (
@@ -62,13 +62,14 @@ export default () => {
           </Typography>
         </Typography>
         {content.map(p =>
-          <Typography variant="body1">
+          <Typography variant="body1" gutterBottom>
             {typeof p === 'string' && p}
             {Array.isArray(p) && p.map(pp => pp)}
           </Typography>
         )}
-        <Typography variant="body1">
-
+        <Typography variant="body1" color="secondary">
+          Contamos com a ajuda de todos para que a lista cresça
+          e melhore cada vez mais!
         </Typography>
       </Paper>
     </Container>

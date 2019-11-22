@@ -69,3 +69,4 @@ extractor/data.json
 extractor/*.pdf
 
 app/src/data.json
+app/src/ingredients.json
