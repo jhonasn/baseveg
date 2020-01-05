@@ -20,6 +20,7 @@ import Category from '../list/category'
 import CardItem from '../list/card-item'
 import FavoriteButton from '../favorites/button'
 import { query } from '../api'
+import configApi from '../api/config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -86,12 +87,14 @@ export default () => {
   const classes = useStyles(theme)
 
   const [showEndOfItems, setShowEndOfItems] = useState(false)
-  const [showLongpressInfo, setShowLongpressInfo] = useState(false)
+  const [showOptionTip, setShowOptionTip] = useState(false)
   const [result, setResult] = useState([])
 
   useEffect(() => {
-    // TODO: in future verify if the message was already shown before open it
-    setShowLongpressInfo(true)
+    (async () => {
+      const isAlreadyShown = await configApi.getIsSearchTipPresented()
+      setShowOptionTip(!isAlreadyShown)
+    })()
     return () => window.onscroll = null
   }, [])
 
@@ -117,7 +120,10 @@ export default () => {
         setShowEndOfItems(true)
   }, 100)
 
-  const handleInfoClose = () => setShowLongpressInfo(false)
+  const handleInfoClose = () => {
+    configApi.setIsSearchTipPresented(true)
+    setShowOptionTip(false)
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -198,8 +204,8 @@ export default () => {
       />
       <Hidden mdUp>
         <Snackbar
-          style={!(showLongpressInfo && result.length) ? { display: 'none' } : {}}
-          open={showLongpressInfo && result.length}
+          style={!(showOptionTip && result.length) ? { display: 'none' } : {}}
+          open={showOptionTip && result.length}
           onClose={handleInfoClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
           TransitionComponent={props => <Slide {...props} direction="up" />}

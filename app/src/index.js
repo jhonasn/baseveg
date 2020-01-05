@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -10,6 +10,7 @@ import { lightTheme, darkTheme } from './theme'
 import Menu from './menu/navbar'
 import MenuBottom from './menu/bottom'
 import * as serviceWorker from './serviceWorker'
+import api from './api/config'
 import 'typeface-roboto'
 
 const App = () => {
@@ -17,14 +18,24 @@ const App = () => {
 
   const [isLightTheme, setIsLightTheme] = useState(prefersDarkMode)
 
-  const changeBarColor = isLight =>
-    document.querySelector('[name=theme-color]').content =
-      indigo[`${isLight ? 900 : 500}`]
+  const changeBarColor = isLight => {
+    const color = indigo[`${isLight ? 900 : 500}`]
+    const meta = document.querySelector('[name=theme-color]')
+    if (meta.content !== color) meta.content = color
+  }
 
-  const changeTheme = (toLight) => {
+  const changeTheme = (toLight, changeDb = true) => {
+    if (changeDb) api.setTheme(toLight)
     setIsLightTheme(toLight)
     changeBarColor(toLight)
   }
+
+  useEffect(() => {
+    (async () => {
+      const isLight = await api.getTheme()
+      if (isLight !== isLightTheme) changeTheme(isLight, false)
+    })()
+  }, [])
 
   // set chrome bar color
   changeBarColor(isLightTheme)

@@ -60,7 +60,7 @@ export default () => {
       setIsAllItemsLoaded(false)
       resetCategory()
     }
-  }, [categoryId, getMoreItems, handleScroll])
+  }, [categoryId])
 
   return (
     <>
