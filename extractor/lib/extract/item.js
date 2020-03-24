@@ -4,6 +4,7 @@ import { categories } from './category.js'
 import { textFixings } from './utils.js'
 
 export let items = []
+export let options = []
 const columns = [
   2.5, // item
   11.9, // option 1
@@ -11,10 +12,12 @@ const columns = [
   31.3, // option 3
   40.8 // option 4
 ]
-let category = null
+let categoryId = null
 let currentColumn = 0
 let currentLine = 0
 let lastItemLine = 0
+let itemId = 0
+let optionId = 0
 
 export default (accumulator, isLineEnd, x, y, nextLines) => {
   if (isLineEnd) currentLine++
@@ -26,7 +29,7 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
     // category change
     if (accumulator.match(/ITEM.*Opção.*1.*Opção.*2.*Opção.*3.*Opção.*4/) &&
     isLineEnd) {
-      category = findCategory(accumulator).name
+      categoryId = findCategory(accumulator).id
       clearAccumulator()
       return
     }
@@ -37,7 +40,7 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
   let currentItem = items.slice().pop()
   if (x > columns[0] && x < columns[1]) {
     if (currentLine !== lastItemLine)
-      items.push({ name: accumulator, category, options: [] })
+      items.push({ id: ++itemId, name: accumulator, categoryId })
     else currentItem.name += accumulator
 
     currentColumn = 0
@@ -51,9 +54,9 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
   const index = columns.indexOf(column)
   if (index > currentColumn) {
     currentColumn = index
-    currentItem.options.push({ name: accumulator })
+    options.push({ id: ++optionId, name: accumulator, itemId: itemId })
   } else {
-    const currentOption = currentItem.options.slice().pop()
+    const currentOption = options.slice().pop()
     currentOption.name += accumulator
   }
   clearAccumulator()
@@ -62,33 +65,35 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
 export const finalizeItems = () => {
   console.log('items extracted, finalizing')
   items = adjustItems()
+  options = adjustOptions()
   write('./items.json', JSON.stringify(items, 1, 2))
+  write('./options.json', JSON.stringify(options, 1, 2))
   nextStep()
 }
 
 const adjustItems = () => {
-  const fixOptions = options => options.map(o => ({ name: textFixings(o.name) }))
-    .filter(o => o.name.length > 1)
-
   return items.reduce((arr, i) => {
     const name = textFixings(removeRoman(i.name))
     let item = arr.find(ai => ai.name === name)
     let isItemAdd = false
 
-    if (item) item.options = item.options.concat(fixOptions(i.options))
-    else {
-      item = { ...i, name, options: fixOptions(i.options) }
+    if (!item) {
+      item = { ...i, name }
       isItemAdd = true
     }
 
     item = addObservation(item)
-    item.options = item.options.map(addObservation)
 
     if (isItemAdd) arr.push(item)
 
     return arr
   }, [])
 }
+
+const adjustOptions = () =>
+  options.map(o => ({ ...o, name: textFixings(o.name) }))
+    .filter(o => o.name.length > 1)
+    .map(addObservation)
 
 const addObservation = item => {
   const result = item.name.match(new RegExp(/(?<=\*\()\d+(?=\))/))

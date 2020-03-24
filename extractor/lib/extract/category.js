@@ -23,14 +23,14 @@ export default (accumulator, isLineEnd, x) => {
     else category.parent = lastParent
 
     // remove accents, diacritics and commas
-    const key = category.name.toLowerCase()
+    const id = category.name.toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, "")
       .replace(/\,/g, '')
       .split(' ')
-    if (!key[0].includes('produto')) category.key = key[0]
-    else if (!key[1].includes('para')) category.key = key[1]
-    else category.key = key[2]
+    if (!id[0].includes('produto')) category.id = id[0]
+    else if (!id[1].includes('para')) category.id = id[1]
+    else category.id = id[2]
 
     categories.push(category)
     clearAccumulator()

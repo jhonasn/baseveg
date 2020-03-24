@@ -1,22 +1,29 @@
-import { writeFileSync as write } from 'fs'
+import {
+  readFileSync as read,
+  writeFileSync as write,
+  existsSync as exists
+} from 'fs'
 import { categories } from './extract/category.js'
 import { observations } from './extract/observation.js'
-import { items } from './extract/item.js'
+import { items, options } from './extract/item.js'
 
 export default () => {
   console.info('mapping')
 
-  const mappedData = categories.map(category => ({
-    ...category,
-    items: items.filter(item => item.category === category.name).map(mapItem)
-  }))
+  const pathIngredients = './ingredients.json'
+  let ingredients = null
+
+  if (exists(pathIngredients)) ingredients = JSON.parse(read(pathIngredients, 'utf8'))
 
   const data = {
     rev: (new Date()).toLocaleDateString(),
-    categories: mappedData
+    categories: categories,
+    items,
+    options,
+    ingredients
   }
 
-  write(`./data.json`, JSON.stringify(data, 1, 2))
+  write('./data.json', JSON.stringify(data, 1, 2))
 }
 
 const mapItem = ({ name, obsId, options }) => {
