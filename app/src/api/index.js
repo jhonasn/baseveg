@@ -1,56 +1,3 @@
-import data from '../data.json'
-
-export const categories = data.categories.map(({ key, name, parent }) => ({
-  key, name, parent
-}))
-
-const decoupleLists = () => {
-  let idx = 0
-  let oidx = 0
-  const options = []
-  const items = data.categories.map(c => c.items.map(i => {
-    i.key = idx++
-    i.category = c.key
-    options.push(...i.options.map(o => {
-      o.key = oidx++
-      o.item = i.key
-      o.category = i.category
-      return o
-    }))
-    return i
-  }))
-  .reduce((arr, a) => arr.concat(a))
-
-  return { items, options }
-}
-
-const { items, options } = decoupleLists()
-
-let lastCategoryKey = null
-let lastIdx = 0
-export const resetCategory = () => lastCategoryKey = null
-export const getNextItems = categoryKey => {
-  if (lastCategoryKey !== categoryKey) {
-    lastIdx = items.findIndex(i => i.category === categoryKey)
-  }
-  const nextItems = items.filter(i => i.category === categoryKey &&
-    i.key >= lastIdx && i.key <= (lastIdx + 50))
-  lastIdx += 50
-  lastCategoryKey = categoryKey
-  return nextItems
-}
-
-export const getOptions = (categoryId, itemId) => ({
-  category: categories.find(c => c.key === categoryId),
-  item: items[itemId],
-  options: items[itemId].options,
-})
-
-export const getIngredients = () => ({ ...data.ingredients })
-
-export const findItem = id => items.find(i => i.key === id)
-export const findOption = id => options.find(o => o.key === id)
-
 export const removeDiacritics = text => text.normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
   // remove non alfanumeric chars too
@@ -65,8 +12,15 @@ export const convertToSearchableWords = text => Object.keys(
   }), {})
 )
 
+const getData = async () => {
+  const response = await fetch(`${process.env.PUBLIC_URL}/data.json`)
+  return await response.json()
+}
 
-export const query = search => {
+export default getData
+
+export const query = async search => {
+  const { categories, items, options } = await getData()
   const searchTerm = removeDiacritics(search.toLowerCase())
   const searchFilter = i => i && removeDiacritics(i.name.toLowerCase())
     .includes(searchTerm)

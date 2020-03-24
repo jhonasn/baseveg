@@ -104,7 +104,7 @@ export default ({
           <FavoriteButton
             noPad
             type={isOption ? 'option' : 'item'}
-            id={i.typeId || i.key}
+            id={i.typeId || i.id}
             onFavoriteChanged={onFavoriteChanged}
           />
         </Grid>

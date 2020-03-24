@@ -48,7 +48,7 @@ export default ({ category: c, item: i, link, banner = false, noType = false }) 
     <Paper
       key={c.name}
       className={clsx(classes.category, banner ? classes.banner : '')}
-      style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/img/${c.key}.jpg)`}}
+      style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/img/${c.id}.jpg)`}}
     >
       <img
         style={{ display: 'none' }}
@@ -92,7 +92,7 @@ export default ({ category: c, item: i, link, banner = false, noType = false }) 
           <Grid item xs className={classes.content}>
             <FavoriteButton
               type={'item'}
-              id={i.key}
+              id={i.id}
             />
           </Grid>
         }

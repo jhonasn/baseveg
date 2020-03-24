@@ -8,34 +8,41 @@ import Loading from '../components/loading'
 import Category from './category'
 import CardItem from './card-item'
 import debounce from 'lodash/debounce'
-import { getNextItems as getItems, categories, resetCategory } from '../api'
+import api from '../api/item'
+import categoryApi from '../api/category'
 
 export default () => {
   // TODO: fix show loading in nonsense times
   // TODO: add floating button to go top
   const { categoryId } = useParams()
 
+  const [category, setCategory] = useState(null)
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false)
   const [openAllItemsLoaded, setOpenAllItemsLoaded] = useState(false)
 
-  if (!categories) return <Loading />
+  useEffect(() => {
+    (async () =>
+      !categoryId && !(categoryId && category.id === categoryId) &&
+        setCategory(await categoryApi.get(categoryId))
+    )()
+  }, [categoryId])
 
-  const category = categories.find(c => c.key === categoryId)
-
-  const getMoreItems = useCallback(() => {
-    const nextItems = getItems(categoryId)
+  const getMoreItems = (categoryId, items, isLoading) => {
+    const nextItems = api.loadNext(categoryId)
     if (nextItems.length < 50) setIsAllItemsLoaded(true)
     const data = [...items, ...nextItems]
     setItems(data)
     if (isLoading) setIsLoading(false)
-  }, [categoryId, items, isLoading])
+  }
+
+  if (!category) return <Loading />
 
   const infiniteScroll = debounce(() => {
     if (window.innerHeight + document.documentElement.scrollTop
         >= document.documentElement.offsetHeight) {
-      getMoreItems()
+      getMoreItems(categoryId, items, isLoading)
     }
   }, 100)
 
@@ -50,7 +57,7 @@ export default () => {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    getMoreItems(categoryId)
+    getMoreItems(categoryId, items, isLoading)
     window.onscroll = handleScroll
 
     return () => {
@@ -58,7 +65,8 @@ export default () => {
       setItems([])
       setIsLoading(false)
       setIsAllItemsLoaded(false)
-      resetCategory()
+      // FIXME:
+      // resetCategory()
     }
   }, [categoryId])
 
@@ -81,7 +89,7 @@ export default () => {
               <Grid item xs={12} key={idx}>
                 <CardItem
                   item={i}
-                  link={`/options/${i.category}/${i.key}`}
+                  link={`/options/${i.category}/${i.id}`}
                 />
               </Grid>
           ))}

@@ -10,7 +10,7 @@ import Chip from '@material-ui/core/Chip'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 import FavoriteButton from '../favorites/button'
-import { getIngredients } from '../api'
+import api from '../api/ingredient'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     padding: [theme.spacing(0.5, 1, 1), '!important'],
   },
   chip: {
-    maxWidth: '251px',
+    maxWidth: '236px',
     marginLeft: '2px',
     marginBottom: '2px',
   },
@@ -45,10 +45,6 @@ export default ({
 }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
-
-  const ingredients = getIngredients()
-
-  const font = ingredients.links.find(l => l.id === i.fontId)
 
   const formatArrayFinishByAnd = arr => {
     const start = arr.slice(0, arr.length).join(', ')
@@ -136,7 +132,7 @@ export default ({
 
         <Typography variant="caption" className={classes.font}>
           <strong>Fonte:</strong>&nbsp;
-          <Link href={font.link} target="_blank">{font.name}</Link>
+          <Link href={i.font.link} target="_blank">{i.font.name}</Link>
         </Typography>
       </CardContent>
     </Card>)

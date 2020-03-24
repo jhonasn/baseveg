@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Category from '../list/category'
 import CardItem from '../list/card-item'
-import api from '../api/favorites'
+import api from '../api/favorite'
 
 export default () => {
   const [favorites, setFavorites] = useState([])

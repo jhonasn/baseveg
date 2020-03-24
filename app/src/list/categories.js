@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Loading from '../components/loading'
 import Category from './category'
-import { categories } from '../api'
+import api from '../api/category'
 
 export default () => {
+  const [categories, setCategories] = useState(null)
+
+  useEffect(() => {
+    (async () => setCategories(await api.load()))()
+  }, [])
+
   if (!categories) return <Loading />
 
   return (
@@ -12,7 +18,7 @@ export default () => {
       <Category
         category={{
           name: 'Lista de produtos liberados do grupo Vegajuda - Veganismo',
-          key: 'vegajuda'
+          id: 'vegajuda'
         }}
         noType
         banner
@@ -23,7 +29,7 @@ export default () => {
           <React.Fragment key={idx}>
             <Category
               category={c}
-              link={`items/${c.key}`}
+              link={`items/${c.id}`}
             />
           </React.Fragment>
         ))}
