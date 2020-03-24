@@ -46,8 +46,25 @@ export const getOptions = (categoryId, itemId) => ({
   options: items[itemId].options,
 })
 
-const removeDiacritics = text => text.normalize('NFD')
-  .replace(/[\u0300-\u036f]/g, "")
+export const getIngredients = () => ({ ...data.ingredients })
+
+export const findItem = id => items.find(i => i.key === id)
+export const findOption = id => options.find(o => o.key === id)
+
+export const removeDiacritics = text => text.normalize('NFD')
+  .replace(/[\u0300-\u036f]/g, '')
+  // remove non alfanumeric chars too
+  .replace(/[^A-z\d\s]/g, '')
+
+export const convertToSeachText = text => removeDiacritics(text.toLowerCase())
+
+export const convertToSearchableWords = text => Object.keys(
+  // remove duplicated words
+  convertToSeachText(text).split(' ').reduce((obj, val) => ({
+    ...obj, [val]: true,
+  }), {})
+)
+
 
 export const query = search => {
   const searchTerm = removeDiacritics(search.toLowerCase())

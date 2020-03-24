@@ -90,7 +90,10 @@ export default ({ category: c, item: i, link, banner = false, noType = false }) 
         </Grid>
         {!!i &&
           <Grid item xs className={classes.content}>
-            <FavoriteButton />
+            <FavoriteButton
+              type={'item'}
+              id={i.key}
+            />
           </Grid>
         }
       </Grid>

@@ -53,7 +53,14 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({
-  item: i, link, children, width, actionsTitle, isOption, badge = true,
+  item: i,
+  link,
+  children,
+  width,
+  actionsTitle,
+  isOption,
+  badge = true,
+  onFavoriteChanged,
 }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
@@ -94,7 +101,12 @@ export default ({
           </Typography>
         </Grid>
         <Grid item xs={1}>
-          <FavoriteButton noPad />
+          <FavoriteButton
+            noPad
+            type={isOption ? 'option' : 'item'}
+            id={i.typeId || i.key}
+            onFavoriteChanged={onFavoriteChanged}
+          />
         </Grid>
       </Grid>
 

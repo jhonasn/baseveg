@@ -4,6 +4,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import FavoriteIcon from '@material-ui/icons/Favorite'
+import DeleteIcon from '@material-ui/icons/Delete'
+import api from '../api/favorites'
 
 const useStyles = makeStyles(theme => ({
   favorite: {
@@ -14,13 +16,21 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default ({ item, className, noPad }) => {
-  // TODO: finish save favorites
-  const [isFavorite, setIsFavorite] = useState(false)
+export default ({ type, id, className, noPad, onFavoriteChanged }) => {
+  const [isFavorite, setIsFavorite] = useState(null)
   const theme = useTheme()
   const classes = useStyles(theme)
 
-  const handleFavorite = () => setIsFavorite(!isFavorite)
+  if (isFavorite === null) (async () => {
+    const favorited = await api.isFavorite(type, id)
+    setIsFavorite(favorited)
+  })()
+
+  const handleFavorite = async () => {
+    const isFavorited = await api.save(type, id)
+    if (onFavoriteChanged) return onFavoriteChanged()
+    setIsFavorite(isFavorited)
+  }
 
   return (
     <IconButton
@@ -28,9 +38,12 @@ export default ({ item, className, noPad }) => {
       onClick={handleFavorite}
       className={clsx(className, noPad ? classes.noPadding : '')}
     >
-      {isFavorite
+      {!onFavoriteChanged && (isFavorite
         ? <FavoriteIcon className={classes.favorite} />
-        : <FavoriteBorderIcon />
+        : <FavoriteBorderIcon />)
+      }
+      {!!onFavoriteChanged &&
+        <DeleteIcon />
       }
     </IconButton>
   )

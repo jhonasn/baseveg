@@ -85,6 +85,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(1.5, 1.5, 1.5, 0),
+    '&:focus': {
+      outlineStyle: 'none',
+    },
   },
   brandIcon: {
     float: 'left',
