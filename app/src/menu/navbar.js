@@ -144,6 +144,12 @@ const useStyles = makeStyles(theme => ({
       },
     },
   },
+  selectedNavItem: {
+    color: theme.palette.primary.main,
+  },
+  selectedNavIcon: {
+    color: 'inherit',
+  },
 }))
 
 export default ({ children, isLightTheme, changeTheme }) => {
@@ -152,10 +158,11 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [open, setOpen] = useState(false)
+  const currentUrl = history.location.pathname
 
   const getSearchText = useCallback(() =>
-    history.location.pathname.replace('/search/', ''),
-  [history.location.pathname])
+    currentUrl.replace('/search/', ''),
+  [currentUrl])
 
   const handleDrawerOpen = () => setOpen(true)
 
@@ -177,14 +184,14 @@ export default ({ children, isLightTheme, changeTheme }) => {
   }
 
   useEffect(() => {
-    const isInSeachRoute = history.location.pathname.includes('/search/')
+    const isInSeachRoute = currentUrl.includes('/search/')
     const searchText = getSearchText()
     const searchInput = document.querySelector('input[name=search]')
 
     if (!isInSeachRoute) searchInput.value = ''
     else if (searchText && searchInput.value !== searchText)
       searchInput.value = searchText
-  }, [history.location.pathname, getSearchText])
+  }, [currentUrl, getSearchText])
 
   return (
     <div className={classes.root}>
@@ -260,8 +267,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.categories}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.categories}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><ListIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <ListIcon />
+            </ListItemIcon>
             <ListItemText primary="Lista" />
           </ListItem>
           <ListItem
@@ -269,8 +280,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.favorites}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.favorites}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><FavoriteIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <FavoriteIcon />
+            </ListItemIcon>
             <ListItemText primary="Favoritos" />
           </ListItem>
           <ListItem
@@ -278,8 +293,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.recent}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.recent}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><RestoreIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <RestoreIcon />
+            </ListItemIcon>
             <ListItemText primary="Recentes" />
           </ListItem>
           <ListItem
@@ -287,8 +306,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.announcements}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.announcements}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><AnnouncementIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <AnnouncementIcon />
+            </ListItemIcon>
             <ListItemText primary="Avisos" />
           </ListItem>
           <ListItem
@@ -296,8 +319,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.ingredients}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.ingredients}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><ColorizeIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <ColorizeIcon />
+            </ListItemIcon>
             <ListItemText primary="Ingredientes" />
           </ListItem>
           <ListItem
@@ -306,8 +333,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             href={routes.facebook}
             target="_blank"
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.facebook}
+            classes={{ selected: classes.selectedNavItem }}
           >
-              <ListItemIcon><LinkIcon /></ListItemIcon>
+              <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+                <LinkIcon />
+              </ListItemIcon>
               <ListItemText primary="Facebook" />
           </ListItem>
           <ListItem
@@ -315,8 +346,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.download}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.download}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><CloudDownloadIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <CloudDownloadIcon />
+            </ListItemIcon>
             <ListItemText primary="Baixar" />
           </ListItem>
           <Divider />
@@ -325,8 +360,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
             component={Link}
             to={routes.about}
             onClick={handleDrawerClose}
+            selected={currentUrl === routes.about}
+            classes={{ selected: classes.selectedNavItem }}
           >
-            <ListItemIcon><InfoIcon /></ListItemIcon>
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              <InfoIcon />
+            </ListItemIcon>
             <ListItemText primary="Sobre" />
           </ListItem>
         </List>
