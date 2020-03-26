@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c457c99a3fc674846cd6178c75bb3442",
+    "revision": "c0439dc3a9a0c25b7abf14f036c7e8d5",
     "url": "/vegajuda/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/vegajuda/static/js/2.9afb82a1.chunk.js"
   },
   {
-    "revision": "2d9337c7d912c3bbcb62",
-    "url": "/vegajuda/static/js/main.70f6eff5.chunk.js"
+    "revision": "de4b1c64bb2a3b39fbb2",
+    "url": "/vegajuda/static/js/main.f9a0c2cc.chunk.js"
   },
   {
     "revision": "6a7e585036be5b78a667",

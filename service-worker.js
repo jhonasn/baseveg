@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/vegajuda/precache-manifest.749747c33b28fe44f981050aa19a1d70.js"
+  "/vegajuda/precache-manifest.17fb6e1ad073764737a43a275b0012a6.js"
 );
 
 self.addEventListener('message', (event) => {
