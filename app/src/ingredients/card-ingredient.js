@@ -1,16 +1,12 @@
 import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import clsx from 'clsx'
 import Grid from '@material-ui/core/Grid'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import Tooltip from '@material-ui/core/Tooltip'
-import Chip from '@material-ui/core/Chip'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
+import Chiptip from '../components/chiptip'
 import FavoriteButton from '../favorites/button'
-import api from '../api/ingredient'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -22,16 +18,6 @@ const useStyles = makeStyles(theme => ({
   },
   cardContent: {
     padding: [theme.spacing(0.5, 1, 1), '!important'],
-  },
-  chip: {
-    maxWidth: '236px',
-    marginLeft: '2px',
-    marginBottom: '2px',
-  },
-  chipLabel: {
-    whiteSpace: ['nowrap', '!important'],
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
   },
   font: {
     float: 'right',
@@ -114,19 +100,7 @@ export default ({
         <Typography variant="caption" className={classes['d-block']} gutterBottom>
           <strong>Alternativas:</strong>
           {i.alternatives.map((a, idx) => (
-            <Tooltip
-              key={idx}
-              title={a}
-            >
-              <Chip
-                label={a}
-                color="primary"
-                className={classes.chip}
-                classes={{ label: classes.chipLabel }}
-                variant="outlined"
-                clickable
-              />
-            </Tooltip>
+            <Chiptip key={idx} maxWidth={196}>{a}</Chiptip>
           ))}
         </Typography>}
 
