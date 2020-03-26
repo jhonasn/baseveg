@@ -48,7 +48,7 @@ export default () => {
               key={f.id}
               item={f}
               isOption={f.type === 'option'}
-              link={f.type === 'item' && `/options/${f.categoryId}/${f.id}`}
+              link={f.type === 'item' && `/options/${f.categoryId}/${f.typeId}`}
               onFavoriteChanged={refreshFavorites}
             />
           ))}
