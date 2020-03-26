@@ -64,8 +64,8 @@ export default (accumulator, isLineEnd, x, y, nextLines) => {
 
 export const finalizeItems = () => {
   console.log('items extracted, finalizing')
-  items = adjustItems()
   options = adjustOptions()
+  items = adjustItems()
   write('./items.json', JSON.stringify(items, 1, 2))
   write('./options.json', JSON.stringify(options, 1, 2))
   nextStep()
@@ -82,6 +82,7 @@ const adjustItems = () => {
       isItemAdd = true
     }
 
+    item.optionsCount = options.filter(o => o.itemId === item.id).length
     item = addObservation(item)
 
     if (isItemAdd) arr.push(item)
