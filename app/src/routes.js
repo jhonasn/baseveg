@@ -28,7 +28,7 @@ export const routes = ({
 
 export default () => (
   <Switch>
-    <Route exact path="/" component={Categories} />
+    <Redirect exact from="/" to={routes.categories} />
     <Route path={routes.categories} component={Categories} />
     <Route path={routes.items} component={Items} />
     <Route path={routes.options} component={Options} />
@@ -39,6 +39,6 @@ export default () => (
     <Route path={routes.download} component={Download} />
     <Route path={routes.about} component={About} />
     <Route path={routes.search} component={Search} />
-    <Redirect to="/" />
+    <Redirect to={routes.categories} />
   </Switch>
 )
