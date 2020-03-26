@@ -12,6 +12,11 @@ export const convertToSearchableWords = text => Object.keys(
   }), {})
 )
 
+export function getNextItems(collection, lastId, chunkSize = 50) {
+  const idx = collection.findIndex(i => i.id === lastId) + 1
+  return collection.slice(idx, idx + chunkSize)
+}
+
 const getData = async () => {
   const response = await fetch(`${process.env.PUBLIC_URL}/data.json`)
   return await response.json()
@@ -19,7 +24,8 @@ const getData = async () => {
 
 export default getData
 
-export const query = async search => {
+export async function query(search) {
+  // BUG: options repeating in items, inclusive options of another item
   const { categories, items, options } = await getData()
   const searchTerm = removeDiacritics(search.toLowerCase())
   const searchFilter = i => i && removeDiacritics(i.name.toLowerCase())

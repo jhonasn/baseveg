@@ -1,19 +1,14 @@
-import getData from '.'
+import getData, { getNextItems } from '.'
 
 const api = {
-  async _load() {
-    return (await getData()).items
-  },
+  _load: async () => (await getData()).items,
 
-  async loadNext(categoryId, cursor) {
-    return (await api._load())
-      .filter(i => i.categoryId === categoryId)
-      .slice(0, 100)
-  },
+  loadNext: async (categoryId, lastId) => getNextItems(
+    (await api._load()).filter(i => i.categoryId === categoryId),
+    lastId,
+  ),
 
-  async get(id) {
-    return (await api._load()).find(i => i.id === id)
-  },
+  get: async id => (await api._load()).find(i => i.id === id),
 }
 
 export default api

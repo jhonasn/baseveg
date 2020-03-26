@@ -55,19 +55,23 @@ const useStyles = makeStyles(theme => ({
 export default ({
   item: i,
   link,
-  children,
   width,
   actionsTitle,
-  isOption,
   badge = true,
+  isOption,
   onFavoriteChanged,
+  children,
 }) => {
   const theme = useTheme()
   const classes = useStyles(theme)
   const history = useHistory()
 
   const handleLinkClick = e => {
-    if (e.target.parentNode.parentNode.parentNode.className.includes('MuiCardActionArea-root'))
+    const findParentButton = el => el.tagName === 'BUTTON'
+      ? el
+      : findParentButton(el.parentNode)
+
+    if (findParentButton(e.target).className.includes('MuiCardActionArea-root'))
       history.push(link)
   }
 
@@ -141,16 +145,13 @@ export default ({
     </>
   )
 
-  const card = (
-    <Card className={classes.card}>
+  const content = (
+    <>
       <CardContent
         className={clsx(classes.cardContent,
           actionsTitle ? classes.contentWithActionsTitle : '')}
       >
-        {!link
-          ? cardContent
-          : <CardActionArea onClick={handleLinkClick}>{cardContent}</CardActionArea>
-        }
+        {cardContent}
       </CardContent>
       {!!children &&
         <CardActions
@@ -160,15 +161,22 @@ export default ({
           {children}
         </CardActions>
       }
+    </>
+  )
+
+  const card = (
+    <Card className={classes.card}>
+      {link
+        ? <CardActionArea onClick={handleLinkClick}>{content}</CardActionArea>
+        : content
+      }
     </Card>
   )
 
-  const optionsLength = i.options && i.options.length
-
-  if (optionsLength && badge) {
+  if (i.optionsCount && badge) {
     return (
       <Badge
-        badgeContent={optionsLength}
+        badgeContent={i.optionsCount}
         color="secondary"
         className={classes.badge}
       >

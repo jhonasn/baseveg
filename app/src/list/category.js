@@ -8,6 +8,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import FavoriteButton from '../favorites/button'
 
+// TODO: transform into a generic banner component
+
 const useStyles = makeStyles(theme => ({
   category: {
     padding: theme.spacing(1, 2, 3),

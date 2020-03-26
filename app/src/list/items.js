@@ -7,12 +7,11 @@ import Slide from '@material-ui/core/Slide'
 import Loading from '../components/loading'
 import Category from './category'
 import CardItem from './card-item'
-import debounce from 'lodash/debounce'
+import useInfiniteScroll from '../hooks/use-infinite-scroll'
 import api from '../api/item'
 import categoryApi from '../api/category'
 
 export default () => {
-  // TODO: fix show loading in nonsense times
   // TODO: add floating button to go top
   const { categoryId } = useParams()
 
@@ -22,53 +21,36 @@ export default () => {
   const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false)
   const [openAllItemsLoaded, setOpenAllItemsLoaded] = useState(false)
 
-  useEffect(() => {
-    (async () =>
-      !categoryId && !(categoryId && category.id === categoryId) &&
-        setCategory(await categoryApi.get(categoryId))
-    )()
-  }, [categoryId])
+  const getMoreItems = async () => {
+    const lastId = (items.slice().pop() || {}).id
+    const nextItems = await api.loadNext(categoryId, lastId)
 
-  const getMoreItems = (categoryId, items, isLoading) => {
-    const nextItems = api.loadNext(categoryId)
-    if (nextItems.length < 50) setIsAllItemsLoaded(true)
-    const data = [...items, ...nextItems]
-    setItems(data)
-    if (isLoading) setIsLoading(false)
+    if (!nextItems.length) {
+      setIsAllItemsLoaded(true)
+      setOpenAllItemsLoaded(true)
+    } else {
+      const data = [...items, ...nextItems]
+      setItems(data)
+    }
+
+    setIsLoading(false)
   }
 
-  if (!category) return <Loading />
-
-  const infiniteScroll = debounce(() => {
-    if (window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight) {
-      getMoreItems(categoryId, items, isLoading)
-    }
-  }, 100)
-
-  const handleScroll = useCallback(() => {
-    if (window.innerHeight + document.documentElement.scrollTop
-        >= document.documentElement.offsetHeight && !isLoading) {
-      if (isAllItemsLoaded) setOpenAllItemsLoaded(true)
-      else setIsLoading(true)
-    }
-    infiniteScroll()
-  }, [isLoading, isAllItemsLoaded, infiniteScroll])
+  useInfiniteScroll(() => {
+    if (!isLoading && !isAllItemsLoaded) {
+      setIsLoading(true)
+      getMoreItems()
+    } else if (isAllItemsLoaded && !openAllItemsLoaded)
+      setOpenAllItemsLoaded(true)
+  })
 
   useEffect(() => {
+    (async () => setCategory(await categoryApi.get(categoryId)))()
+    getMoreItems()
     window.scrollTo(0, 0)
-    getMoreItems(categoryId, items, isLoading)
-    window.onscroll = handleScroll
-
-    return () => {
-      window.onscroll = null
-      setItems([])
-      setIsLoading(false)
-      setIsAllItemsLoaded(false)
-      // FIXME:
-      // resetCategory()
-    }
   }, [categoryId])
+
+  if (!category) return <Loading />
 
   return (
     <>
@@ -89,7 +71,7 @@ export default () => {
               <Grid item xs={12} key={idx}>
                 <CardItem
                   item={i}
-                  link={`/options/${i.category}/${i.id}`}
+                  link={`/options/${i.categoryId}/${i.id}`}
                 />
               </Grid>
           ))}

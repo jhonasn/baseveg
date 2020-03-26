@@ -1,9 +1,7 @@
-import getData from '.'
+import getData, { getNextItems } from '.'
 
 const api = {
-  async _load() {
-    return (await getData()).ingredients
-  },
+  _load: async () => (await getData()).ingredients,
 
   async load() {
     const ingredients = await api._load()
@@ -30,13 +28,9 @@ const api = {
     )
   },
 
-  loadNext() {
-    //implement
-  },
+  loadNext: async lastId => getNextItems(await this.load(), lastId),
 
-  async getFont(id) {
-    return (await api._load()).links.find(l => l.id === id)
-  },
+  getFont: async id => (await api._load()).links.find(l => l.id === id),
 }
 
 export default api

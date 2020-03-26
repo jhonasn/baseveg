@@ -1,20 +1,16 @@
 
 import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
-import Fab from '@material-ui/core/Fab'
+import Backdrop from '@material-ui/core/Backdrop'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 const useStyles = makeStyles(theme => ({
   loading: {
-    position: 'fixed',
-    top: theme.spacing(12),
-    zIndex: 1,
-    textAlign: 'center',
+    zIndex: theme.zIndex.drawer + 1,
   },
   loadingFab: {
     backgroundColor: theme.palette.background.paper,
-  }
+  },
 }))
 
 export default () => {
@@ -22,10 +18,8 @@ export default () => {
   const classes = useStyles(theme)
 
   return (
-    <Container className={classes.loading}>
-      <Fab className={classes.loadingFab}>
-        <CircularProgress color="secondary" className={classes.circle} />
-      </Fab>
-    </Container>
+    <Backdrop className={classes.loading} open>
+        <CircularProgress color="secondary" />
+    </Backdrop>
   )
 }

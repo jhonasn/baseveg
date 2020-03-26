@@ -6,9 +6,9 @@ const getItem = itemApi.get
 const getOption = optionApi.get
 
 const api = {
-  get: async (type, id) => {
+  async get(type, id) {
     const idx = (await store.getTx()).store.index('id')
-    const favorite = idx.get([type, id])
+    const favorite = await idx.get([type, id])
     return favorite
   },
 
@@ -17,24 +17,25 @@ const api = {
   /** Toggle item into the favorites
   @return {Boolean} is favorite state;
   */
-  save: async (type, id) => {
+  async save(type, id) {
     const favorite = await api.get(type, id)
 
     if (!favorite) {
-      const { name } = (type === 'item' ? getItem : getOption)(id)
+      const { name } = await (type === 'item' ? getItem : getOption)(id)
       return await store.put({ type, typeId: id, name }, true)
     } else return !(await store.delete(favorite.id), true)
   },
 
-  query: async (search = '') => {
-    const mapFavorites = (favorite) => {
-      const { type, typeId: id } = favorite
-      if (type === 'item') return { ...favorite, ...getItem(id) }
-      else return { ...favorite, ...getOption(id) }
-    }
+  async query(search = '') {
+    const mapFavorites = ({ typeId: id, type }) => (type === 'item'
+      ? getItem : getOption)(id)
 
     const favorites = await store.searchTerms('name', search)
-    return favorites.map(mapFavorites) || []
+    const mapped = await Promise.all(favorites.map(mapFavorites))
+    return favorites.map(f => ({
+      ...mapped.find(m => f.typeId === m.id),
+      ...f,
+    }))
   }
 }
 

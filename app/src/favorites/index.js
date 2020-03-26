@@ -20,7 +20,6 @@ export default () => {
     const res = await api.query(text)
     setFavorites(res)
   }
-  console.log(favorites)
 
   return (
     <>
@@ -47,8 +46,9 @@ export default () => {
           {favorites.map(f => (
             <CardItem
               key={f.id}
-              isOption={f.type === 'option'}
               item={f}
+              isOption={f.type === 'option'}
+              link={f.type === 'item' && `/options/${f.categoryId}/${f.id}`}
               onFavoriteChanged={refreshFavorites}
             />
           ))}

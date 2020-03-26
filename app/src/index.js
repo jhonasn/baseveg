@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { BrowserRouter as Router } from 'react-router-dom'
@@ -24,18 +24,18 @@ const App = () => {
     if (meta.content !== color) meta.content = color
   }
 
-  const changeTheme = (toLight, changeDb = true) => {
+  const changeTheme = useCallback((toLight, changeDb = true) => {
     if (changeDb) api.setTheme(toLight)
     setIsLightTheme(toLight)
     changeBarColor(toLight)
-  }
+  }, [])
 
   useEffect(() => {
     (async () => {
       const isLight = await api.getTheme()
       if (isLight !== isLightTheme) changeTheme(isLight, false)
     })()
-  }, [])
+  }, [isLightTheme, changeTheme])
 
   // set chrome bar color
   changeBarColor(isLightTheme)
