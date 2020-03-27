@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import Loading from '../components/loading'
-import Category from '../list/category'
+import Banner from '../components/banner'
 import CardIngredient from './card-ingredient'
 import useInfiniteScroll from '../hooks/use-infinite-scroll'
 import api from '../api/ingredient'
@@ -52,13 +52,11 @@ export default () => {
   return (
     <>
       {isLoading && <Loading />}
-      <Category
-        item={{ id: 'ingredients', name: 'Ingredientes não veganos' }}
-        category={{
-          id: 'count', name: total && `${total} ingredientes cadastrados`
-        }}
-        noType
-        banner
+      <Banner
+        title="Ingredientes não veganos"
+        subtitle={total && `${total} ingredientes cadastrados`}
+        imgName="ingredients"
+        isFullWidth
       />
       <Container>
         {ingredients.map(i => (

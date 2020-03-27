@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import Loading from '../components/loading'
-import Category from './category'
+import Banner from '../components/banner'
 import CardItem from './card-item'
 import categoryApi from '../api/category'
 import itemApi from '../api/item'
@@ -29,7 +29,14 @@ export default () => {
 
   return (
     <>
-      <Category category={category} item={item} banner />
+      <Banner
+        title={item.name}
+        subtitle={category.name}
+        imgName={category.id}
+        type={<>Produto <small>(item)</small></>}
+        isFullWidth
+        favoriteOptions={{ id: item.id, type: 'item' }}
+      />
       <Container>
         {options.map((o, idx) => (
           <CardItem key={idx} item={o} isOption />

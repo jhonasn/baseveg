@@ -54,10 +54,7 @@ export default () => {
   return (
     <>
       {isLoading && <Loading />}
-      <Category
-        category={category}
-        banner
-      />
+      <Category data={category} isBanner />
       <Container fixed>
         <Grid
           container

@@ -13,6 +13,7 @@ import Slide from '@material-ui/core/Slide'
 import IconButton from '@material-ui/core/IconButton'
 import InfoIcon from '@material-ui/icons/Info'
 import CloseIcon from '@material-ui/icons/Close'
+import Banner from '../components/banner'
 import Category from '../list/category'
 import CardItem from '../list/card-item'
 import Loading from '../components/loading'
@@ -100,11 +101,11 @@ export default () => {
 
   return (
     <>
-      <Category
-        category={{ name: `${total} resulados para ${search}` }}
-        item={{ id: 'search', name: 'Resultados da busca' }}
-        noType
-        banner
+      <Banner
+        title="Resultados da busca"
+        subtitle={total && `${total} resulados para ${search}`}
+        imgName="search"
+        isFullWidth
       />
       <Container className={classes.root}>
         {result.map(c => (
@@ -118,8 +119,7 @@ export default () => {
           >
             <Grid item xs={12}>
               <Category
-                category={{ ...c, name: <SearchResultText result={c} /> }}
-                link={`/items/${c.id}`}
+                data={{ ...c, name: <SearchResultText result={c} /> }}
               />
             </Grid>
             {c.items.map(i => (

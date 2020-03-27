@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Category from '../list/category'
+import Banner from '../components/banner'
 import CardItem from '../list/card-item'
 import CardIngredient from '../ingredients/card-ingredient'
 import api from '../api/favorite'
@@ -17,13 +17,10 @@ export default () => {
 
   return (
     <>
-      <Category
-        category={{
-          name: 'Favoritos',
-          key: 'favorites'
-        }}
-        noType
-        banner
+      <Banner
+        title="Favoritos"
+        imgName="favorites"
+        isFullWidth
       />
       <Container fixed>
         <Grid

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Loading from '../components/loading'
+import Banner from '../components/banner'
 import Category from './category'
 import api from '../api/category'
 
@@ -15,23 +16,14 @@ export default () => {
 
   return (
     <>
-      <Category
-        category={{
-          name: 'Lista de produtos liberados do grupo Vegajuda - Veganismo',
-          id: 'vegajuda'
-        }}
-        noType
-        banner
+      <Banner
+        title="Lista de produtos liberados do grupo Vegajuda - Veganismo"
+        imgName="vegajuda"
+        isFullWidth
       />
       <Container fixed>
-        {categories && categories
-          .map((c, idx) => (
-          <React.Fragment key={idx}>
-            <Category
-              category={c}
-              link={`items/${c.id}`}
-            />
-          </React.Fragment>
+        {categories && categories.map((c, idx) => (
+          <Category key={c.id} data={c} />
         ))}
       </Container>
     </>
