@@ -10,17 +10,10 @@ export default () => {
   const [favorites, setFavorites] = useState([])
 
   const refreshFavorites = () => {
-    (async () => setFavorites(await api.query()))()
+    (async () => setFavorites(await api.load()))()
   }
 
   useEffect(refreshFavorites, [])
-
-  async function search (e) {
-    e.preventDefault()
-    const text = e.target.search.value
-    const res = await api.query(text)
-    setFavorites(res)
-  }
 
   return (
     <>
@@ -40,10 +33,6 @@ export default () => {
           alignItems="flex-start"
           spacing={1}
         >
-          <form onSubmit={search}>
-            <input name="search" />
-          </form>
-          <br />
           {favorites.map(f => (
             f.type === 'ingredient'
               ? (

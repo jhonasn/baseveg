@@ -1,7 +1,8 @@
 import getData from '.'
+import itemApi from './item'
 
 const api = {
-  _load: async () => (await getData()).options,
+  _load: async () => itemApi.loadWithObservations(await getData(), 'options'),
 
   load: async itemId => (await api._load()).filter(o => o.itemId === itemId),
 

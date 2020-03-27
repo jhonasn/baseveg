@@ -10,6 +10,18 @@ const apis = {
 }
 
 const api = {
+  async load() {
+    const getFavoriteType = ({ typeId: id, type }) => apis[type].get(id)
+
+    const favorites = await store.getAll()
+    const typeItems = await Promise.all(favorites.map(getFavoriteType))
+
+    // favorite with type fields (override type fields by favorite fields)
+    return favorites.map((f, idx) => ({
+      ...typeItems[idx], ...f
+    }))
+  },
+
   async get(type, id) {
     const idx = (await store.getTx()).store.index('id')
     const favorite = await idx.get([type, id])
@@ -31,13 +43,10 @@ const api = {
   },
 
   async query(search = '') {
-    const getFavoriteType = ({ typeId: id, type }) => apis[type].get(id)
-
-    const favorites = await store.searchTerms('name', search)
-    const typeItems = await Promise.all(favorites.map(getFavoriteType))
-    return favorites.map((f, idx) => ({
-      ...typeItems[idx], ...f
-    }))
+    return this.load().filter(f =>
+      (f.type === 'ingredient' && ingredientApi.searchFilter(f, search)) ||
+      (f.type !== 'ingredient' && itemApi.searchFilter(f, search))
+    )
   }
 }
 

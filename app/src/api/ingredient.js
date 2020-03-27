@@ -28,6 +28,13 @@ const api = {
     i.font = await api.getFont(i.fontId)
     return i
   },
+
+  searchFilter: (i, search) => i.name.includes(search) ||
+    (i.descriptionShort && i.descriptionShort.includes(search)) ||
+    (i.otherNames && i.otherNames.some(n => n.includes(search))) ||
+    (i.description && i.description.includes(search)) ||
+    (i.use && i.use.includes()) ||
+    (i.alternatives && i.alternatives.some(a => a.includes(search)))
 }
 
 export default api

@@ -14,6 +14,7 @@ import api from './api/config'
 import 'typeface-roboto'
 
 const App = () => {
+  // TODO: uglify data.json
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 
   const [isLightTheme, setIsLightTheme] = useState(prefersDarkMode)

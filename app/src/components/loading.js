@@ -8,12 +8,10 @@ const useStyles = makeStyles(theme => ({
   loading: {
     zIndex: theme.zIndex.drawer + 1,
   },
-  loadingFab: {
-    backgroundColor: theme.palette.background.paper,
-  },
 }))
 
 export default () => {
+  // TODO: change loading to run with a worker
   const theme = useTheme()
   const classes = useStyles(theme)
 

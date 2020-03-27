@@ -17,6 +17,7 @@ export default () => {
     categories: categories,
     items,
     options,
+    observations,
     fonts,
     ingredients,
   }
