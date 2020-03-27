@@ -153,6 +153,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ children, isLightTheme, changeTheme }) => {
+  // TODO: implement slide to open menu, i think this can help:
+  // https://material-ui.com/pt/components/transitions/
   const history = useHistory()
   const classes = useStyles()
   const theme = useTheme()

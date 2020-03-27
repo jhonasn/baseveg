@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
@@ -29,8 +29,7 @@ export default () => {
       setIsAllItemsLoaded(true)
       setOpenAllItemsLoaded(true)
     } else {
-      const data = [...items, ...nextItems]
-      setItems(data)
+      setItems([...items, ...nextItems])
     }
 
     setIsLoading(false)

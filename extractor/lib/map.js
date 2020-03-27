@@ -55,7 +55,7 @@ const getIngredients = () => {
     id: ++id, type: i.type || 'general', ...i
   }))
 
-  return { ingredients: data, fonts: ingredients.links }
+  return { ingredients: data, fonts: ingredients.fonts }
 }
 
 const mapItem = ({ name, obsId, options }) => {

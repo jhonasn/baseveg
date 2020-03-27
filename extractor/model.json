@@ -73,5 +73,20 @@
       "name": "category name",
       "parent": "parent category entity"
     }
-  }
+  },
+  "_comment": "ingredients model",
+  "ingredients": {
+    "name": "Model",
+    "otherNames": ["Name 1", "Name 2"],
+    "descriptionShort": "Short description",
+    "description": "Other details of the ingredient",
+    "alternatives": ["Synthetic", "Vegetal"],
+    "use": "Used in cooking",
+    "fontId": 0,
+    "font": {
+      "id": 0,
+      "name": "Title of the source",
+      "link": "https://www.somesite.com/source"
+    },
+  },
 }

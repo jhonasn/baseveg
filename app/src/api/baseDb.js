@@ -1,5 +1,4 @@
 import { openDB } from 'idb/with-async-ittr.js'
-import { convertToSearchableWords } from './index'
 
 const DB_NAME = 'vegajuda'
 const DB_VERSION = 1

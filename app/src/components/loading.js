@@ -11,13 +11,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default () => {
-  // TODO: change loading to run with a worker
   const theme = useTheme()
   const classes = useStyles(theme)
 
   return (
     <Backdrop className={classes.loading} open>
-        <CircularProgress color="secondary" />
+        <CircularProgress color="secondary" disableShrink />
     </Backdrop>
   )
 }

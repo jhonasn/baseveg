@@ -5,14 +5,7 @@ export const removeDiacritics = text => text.normalize('NFD')
 
 export const convertToSeachText = text => removeDiacritics(text.toLowerCase())
 
-export const convertToSearchableWords = text => Object.keys(
-  // remove duplicated words
-  convertToSeachText(text).split(' ').reduce((obj, val) => ({
-    ...obj, [val]: true,
-  }), {})
-)
-
-export function getNextItems(collection, lastId, chunkSize = 50) {
+export function getNextItems(collection, lastId, chunkSize = 20) {
   const idx = collection.findIndex(i => i.id === lastId) + 1
   return collection.slice(idx, idx + chunkSize)
 }

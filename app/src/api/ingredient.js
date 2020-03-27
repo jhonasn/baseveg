@@ -1,33 +1,18 @@
 import getData, { getNextItems } from '.'
 
 const api = {
-  _load: async () => (await getData()).ingredients,
-
-  async loadNext() {
-    const ingredients = await api._load()
-
-    return Promise.all(
-      ingredients.slice(0, 8).concat(
-        ingredients.filter(i => i.otherNames && i.otherNames.length > 1).slice(0, 2)
-      ).concat(
-        ingredients.filter(i => i.alternatives).slice(0, 3)
-      ).concat(
-        ingredients.filter(i => i.type === 'animal').slice(0, 5)
-      ).concat(
-        ingredients.filter(i => i.type === 'milk').slice(0, 5)
-      ).map(async i => ({
-        ...i, font: await api.getFont(i.fontId)
-      }))
-    )
+  async _load() {
+    const data = await getData()
+    return data.ingredients.map(i => ({
+      ...i, font: data.fonts.find(f => f.id === i.fontId)
+    }))
   },
 
-  getFont: async id => (await getData()).fonts.find(f => f.id === id),
+  loadNext: async lastId => getNextItems(await api._load(), lastId),
 
-  async get(id) {
-    const i = (await api._load()).find(i => i.id === id)
-    i.font = await api.getFont(i.fontId)
-    return i
-  },
+  get: async id => (await api._load()).find(i => i.id === id),
+
+  count: async () => (await api._load()).length,
 
   searchFilter: (i, search) => i.name.includes(search) ||
     (i.descriptionShort && i.descriptionShort.includes(search)) ||

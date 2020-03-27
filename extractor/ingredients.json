@@ -1,5 +1,5 @@
 {
-  "links": [
+  "fonts": [
     {
       "id": 1,
       "name": "Olho no rótulo I",
@@ -14,26 +14,6 @@
       "id": 3,
       "name": "Olho no rótulo III (texto)",
       "link": "https://www.facebook.com/notes/vegajuda-veganismo/olho-no-rotulo-iii-produtos-farmac%C3%AAuticos-e-ingredientes-de-origem-animal/349022748632960/"
-    }
-  ],
-  "_ingredientsModel": [
-    {
-      "name": "Model",
-      "otherNames": ["Name 1", "Name 2"],
-      "descriptionShort": "Short description",
-      "description": "Other details of the ingredient",
-      "alternatives": ["Synthetic", "Vegetal"],
-      "use": "Used in cooking",
-      "fontId": 0
-    },
-    {
-      "name": "",
-      "otherNames": [""],
-      "descriptionShort": "",
-      "description": "",
-      "alternatives": [""],
-      "use": "",
-      "fontId": 0
     }
   ],
   "general": [
@@ -357,7 +337,7 @@
     },
     {
       "name": "Elastina",
-      "otherNames": "Elastin",
+      "otherNames": ["Elastin"],
       "descriptionShort": "Proteína elástica, encontrada nos ligamentos do pescoço e nas paredes arteriais das vacas",
       "description": "Similar ao colágeno. Não afeta a elasticidade da pele",
       "alternatives": ["Sintética", "Proteína de fontes vegetais"],
@@ -618,7 +598,7 @@
     },
     {
       "name": "Ácido nicotinico",
-      "otherNames": "375",
+      "otherNames": ["375"],
       "descriptionShort": "Produzido a partir de fermentação",
       "description": "Produção por fígado é muito cara",
       "fontId": 1
@@ -693,7 +673,7 @@
     },
     {
       "name": "Âmbar gris",
-      "otherNames": "Âmbar cinza",
+      "otherNames": ["Âmbar cinza"],
       "descriptionShort": "Extraído do intestino de baleias",
       "use": "Perfumaria",
       "fontId": 2
