@@ -42,7 +42,7 @@ const App = () => {
   changeBarColor(isLightTheme)
 
   return (
-    <Router>
+    <Router basename={`${process.env.PUBLIC_URL}/`}>
       <ThemeProvider theme={isLightTheme ? darkTheme : lightTheme}>
         <CssBaseline/>
         <Menu isLightTheme={isLightTheme} changeTheme={changeTheme}>
