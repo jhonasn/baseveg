@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Category from '../list/category'
 import CardItem from '../list/card-item'
+import CardIngredient from '../ingredients/card-ingredient'
 import api from '../api/favorite'
 
 export default () => {
@@ -44,13 +45,23 @@ export default () => {
           </form>
           <br />
           {favorites.map(f => (
-            <CardItem
-              key={f.id}
-              item={f}
-              isOption={f.type === 'option'}
-              link={f.type === 'item' && `/options/${f.categoryId}/${f.typeId}`}
-              onFavoriteChanged={refreshFavorites}
-            />
+            f.type === 'ingredient'
+              ? (
+                <CardIngredient
+                  key={f.id}
+                  id={f.typeId}
+                  ingredient={f}
+                  onFavoriteChanged={refreshFavorites}
+                />
+              ) : (
+                <CardItem
+                  key={f.id}
+                  item={f}
+                  isOption={f.type === 'option'}
+                  link={f.type === 'item' && `/options/${f.categoryId}/${f.typeId}`}
+                  onFavoriteChanged={refreshFavorites}
+                />
+              )
           ))}
         </Grid>
       </Container>

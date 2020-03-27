@@ -6,11 +6,10 @@ import CardIngredient from './card-ingredient'
 import api from '../api/ingredient'
 
 export default () => {
-  // FIXME: favoriting ingredient doesn't work
   const [ingredients, setIngredients] = useState([])
 
   useEffect(() => {
-    (async () => setIngredients(await api.load()))()
+    (async () => setIngredients(await api.loadNext()))()
   }, [])
 
   return (
@@ -24,10 +23,10 @@ export default () => {
         banner
       />
       <Container>
-        {ingredients.map((i, idx) => (
-          <Grid item xs={12} key={idx}>
+        {ingredients.map(i => (
+          <Grid item xs={12} key={i.id}>
             <CardIngredient
-              id={`${i.type || 'general'}-${idx}`}
+              id={i.id}
               ingredient={i}
             />
           </Grid>

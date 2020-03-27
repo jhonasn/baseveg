@@ -1,9 +1,13 @@
 import { favoritesStore as store } from './baseDb'
 import itemApi from './item'
 import optionApi from './option'
+import ingredientApi from './ingredient'
 
-const getItem = itemApi.get
-const getOption = optionApi.get
+const apis = {
+  item: itemApi,
+  option: optionApi,
+  ingredient: ingredientApi,
+}
 
 const api = {
   async get(type, id) {
@@ -21,20 +25,18 @@ const api = {
     const favorite = await api.get(type, id)
 
     if (!favorite) {
-      const { name } = await (type === 'item' ? getItem : getOption)(id)
+      const { name } = await apis[type].get(id)
       return await store.put({ type, typeId: id, name }, true)
     } else return !(await store.delete(favorite.id), true)
   },
 
   async query(search = '') {
-    const mapFavorites = ({ typeId: id, type }) => (type === 'item'
-      ? getItem : getOption)(id)
+    const getFavoriteType = ({ typeId: id, type }) => apis[type].get(id)
 
     const favorites = await store.searchTerms('name', search)
-    const mapped = await Promise.all(favorites.map(mapFavorites))
-    return favorites.map(f => ({
-      ...mapped.find(m => f.typeId === m.id),
-      ...f,
+    const typeItems = await Promise.all(favorites.map(getFavoriteType))
+    return favorites.map((f, idx) => ({
+      ...typeItems[idx], ...f
     }))
   }
 }
