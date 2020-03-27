@@ -58200,7 +58200,9 @@
       "id": 50,
       "type": "general",
       "name": "Elastina",
-      "otherNames": "Elastin",
+      "otherNames": [
+        "Elastin"
+      ],
       "descriptionShort": "Proteína elástica, encontrada nos ligamentos do pescoço e nas paredes arteriais das vacas",
       "description": "Similar ao colágeno. Não afeta a elasticidade da pele",
       "alternatives": [
@@ -58693,7 +58695,9 @@
       "id": 87,
       "type": "general",
       "name": "Ácido nicotinico",
-      "otherNames": "375",
+      "otherNames": [
+        "375"
+      ],
       "descriptionShort": "Produzido a partir de fermentação",
       "description": "Produção por fígado é muito cara",
       "fontId": 1
@@ -58805,7 +58809,9 @@
       "id": 99,
       "type": "general",
       "name": "Âmbar gris",
-      "otherNames": "Âmbar cinza",
+      "otherNames": [
+        "Âmbar cinza"
+      ],
       "descriptionShort": "Extraído do intestino de baleias",
       "use": "Perfumaria",
       "fontId": 2
