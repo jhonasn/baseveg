@@ -7,7 +7,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import CardActionArea from '@material-ui/core/CardActionArea'
-import Badge from '@material-ui/core/Badge';
+import Badge from '@material-ui/core/Badge'
 import Typography from '@material-ui/core/Typography'
 import red from '@material-ui/core/colors/red'
 import lightBlue from '@material-ui/core/colors/lightBlue'

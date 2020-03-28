@@ -31,7 +31,7 @@ const api = {
   isFavorite: async (type, id) => !!await api.get(type, id),
 
   /** Toggle item into the favorites
-  @return {Boolean} is favorite state;
+  @return {Boolean} is favorite state
   */
   async save(type, id) {
     const favorite = await api.get(type, id)

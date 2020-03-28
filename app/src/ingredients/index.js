@@ -11,6 +11,8 @@ import api from '../api/ingredient'
 
 export default () => {
   // TODO: implement search only ingredients
+  // TODO: create a component to wrap infinite scroll and
+  // show "end of results" logic in one place
   // QUESTION: bring total with loadNext? keep search in mind
   const [ingredients, setIngredients] = useState(null)
   const [total, setTotal] = useState(null)

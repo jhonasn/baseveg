@@ -16,11 +16,12 @@ import CloseIcon from '@material-ui/icons/Close'
 import Banner from '../components/banner'
 import Category from '../list/category'
 import CardItem from '../list/card-item'
+import CardIngredient from '../ingredients/card-ingredient'
 import Loading from '../components/loading'
 import Chiptip, { ChipContainer } from '../components/chiptip'
 import FavoriteButton from '../favorites/button'
-import { query } from '../api'
 import configApi from '../api/config'
+import api from '../api/search'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,11 +50,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SearchResultText = ({ result }) => (
-  Array.isArray(result.name)
-    ? result.name.map((part, idx) => (
+  Array.isArray(result)
+    ? result.map((part, idx) => (
       part.bold ? <b key={idx}>{part.content}</b> : part.content
     ))
-    : result.name
+    : result
 )
 
 export default () => {
@@ -69,7 +70,7 @@ export default () => {
   const [result, setResult] = useState(null)
 
   useEffect(() => {
-    (async () => setResult(await query(search)))()
+    (async () => setResult(await api.query(search)))()
     window.scrollTo(0, 0)
   }, [search])
 
@@ -95,20 +96,18 @@ export default () => {
     setShowOptionTip(false)
   }
 
-  // TODO: bring total results from query
-  const total = 123
   if (!result) return <Loading />
 
   return (
     <>
       <Banner
         title="Resultados da busca"
-        subtitle={total && `${total} resulados para ${search}`}
+        subtitle={`${result.total} resulados para ${search}`}
         imgName="search"
         isFullWidth
       />
       <Container className={classes.root}>
-        {result.map(c => (
+        {result.categories.map(c => (
           <Grid
             key={c.id}
             container
@@ -119,26 +118,26 @@ export default () => {
           >
             <Grid item xs={12}>
               <Category
-                data={{ ...c, name: <SearchResultText result={c} /> }}
+                data={{ ...c, name: <SearchResultText result={c.name} /> }}
               />
             </Grid>
-            {c.items.map(i => (
+            {(c.items || []).map(i => (
               <Grid key={i.id} item xs={12}>
                 <CardItem
-                  item={{ ...i, name: <SearchResultText result={i} /> }}
+                  item={{ ...i, name: <SearchResultText result={i.name} /> }}
                   link={`/options/${i.category}/${i.id}`}
                   badge={false}
                   actionsTitle={
-                    i.options.length ? <>Marcas <small>(opções)</small>:</> : null
+                    i.options && i.options.length
+                      ? <>Marcas <small>(opções)</small>:</>
+                      : null
                   }
                 >
                   <ChipContainer>
-                    {i.options.map(o => (
-                      <>
-                        <Chiptip key={o.id} icon={<FavoriteButton noPad />}>
-                          <SearchResultText result={o} />
-                        </Chiptip>
-                      </>
+                    {(i.options || []).map(o => (
+                      <Chiptip key={o.id} icon={<FavoriteButton noPad />}>
+                        <SearchResultText result={o.name} />
+                      </Chiptip>
                     ))}
                   </ChipContainer>
                 </CardItem>
@@ -146,7 +145,39 @@ export default () => {
             ))}
           </Grid>
         ))}
-        {!result.length &&
+        {!!result.ingredients.length &&
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="flex-start"
+            spacing={1}
+          >
+            <Grid item xs={12}>
+              <Banner
+                title="Ingredientes não veganos"
+                imgName="ingredients"
+              />
+            </Grid>
+            {result.ingredients.map(i => (
+              <Grid key={i.id} item xs={12}>
+                <CardIngredient id={i.id} ingredient={{
+                  ...i,
+                  name: <SearchResultText result={i.name} />,
+                  description: i.description && <SearchResultText result={i.description} />,
+                  descriptionShort: i.descriptionShort &&
+                    <SearchResultText result={i.descriptionShort} />,
+                  use: i.use && <SearchResultText result={i.use} />,
+                  alternatives: i.alternatives &&
+                    i.alternatives.map(a => <SearchResultText result={a} />),
+                  otherNames: i.otherNames &&
+                    i.otherNames.map(o => <SearchResultText result={o} />),
+                }} />
+              </Grid>
+            ))}
+          </Grid>
+        }
+        {!result.total &&
           <Paper className={classes.notFountPaper}>
             <Typography variant="body1">
               Nenhum resultado encontrado na busca de "{search}"
