@@ -73,6 +73,7 @@ export const finalizeItems = () => {
 
 const adjustItems = () => {
   return items.reduce((arr, i) => {
+    // group items removing roman sufix
     const name = textFixings(removeRoman(i.name))
     let item = arr.find(ai => ai.name === name)
     let isItemAdd = false
@@ -80,6 +81,9 @@ const adjustItems = () => {
     if (!item) {
       item = { ...i, name }
       isItemAdd = true
+    } else if (i.id !== item.id) {
+      // group item name, so bring options from the current item
+      options.filter(o => o.itemId === i.id).forEach(o => o.itemId = item.id)
     }
 
     item.optionsCount = options.filter(o => o.itemId === item.id).length
