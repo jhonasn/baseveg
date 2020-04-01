@@ -60,6 +60,7 @@ const SearchResultText = ({ result }) => (
 export default () => {
   // TODO: add category expand/collapse option
   // TODO: add search ingredients
+  // TODO: implement infinite scroll
   // BUG: options not shown
   const { text: search } = useParams()
   const theme = useTheme()

@@ -32,13 +32,6 @@ export default ({
   const theme = useTheme()
   const classes = useStyles(theme)
 
-  const formatArrayFinishByAnd = arr => {
-    const start = arr.slice(0, arr.length).join(', ')
-    const end = arr[arr.length - 1]
-    if (arr.length > 1) return `${start} e ${end}`
-    else return start
-  }
-
   return (
     <Card className={classes.card}>
       <CardContent
@@ -68,7 +61,11 @@ export default ({
             {i.otherNames &&
             <Typography variant="caption">
               <strong>Também conhecido como</strong>&nbsp;
-              {formatArrayFinishByAnd(i.otherNames)}
+              {i.otherNames.map((name, idx) =>
+                (idx === (i.otherNames.length - 1) && name) ||
+                (idx === (i.otherNames.length - 2) && <>{name} e </>) ||
+                <>{name}, </>
+              )}
             </Typography>}
           </Grid>
           <Grid item xs={1}>
