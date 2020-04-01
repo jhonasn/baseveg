@@ -61,7 +61,6 @@ export default () => {
   // TODO: add category expand/collapse option
   // TODO: add search ingredients
   // TODO: implement infinite scroll
-  // BUG: options not shown
   const { text: search } = useParams()
   const theme = useTheme()
   const classes = useStyles(theme)
@@ -126,17 +125,24 @@ export default () => {
               <Grid key={i.id} item xs={12}>
                 <CardItem
                   item={{ ...i, name: <SearchResultText result={i.name} /> }}
-                  link={`/options/${i.category}/${i.id}`}
+                  link={`/options/${i.categoryId}/${i.id}`}
                   badge={false}
                   actionsTitle={
                     i.options && i.options.length
                       ? <>Marcas <small>(opções)</small>:</>
                       : null
                   }
+                  skipClick={'Chip'}
                 >
                   <ChipContainer>
                     {(i.options || []).map(o => (
-                      <Chiptip key={o.id} icon={<FavoriteButton noPad />}>
+                      <Chiptip key={o.id} icon={
+                        <FavoriteButton
+                          type="option"
+                          id={o.id}
+                          noPad
+                        />
+                      }>
                         <SearchResultText result={o.name} />
                       </Chiptip>
                     ))}
@@ -170,9 +176,9 @@ export default () => {
                     <SearchResultText result={i.descriptionShort} />,
                   use: i.use && <SearchResultText result={i.use} />,
                   alternatives: i.alternatives &&
-                    i.alternatives.map(a => <SearchResultText result={a} />),
+                    i.alternatives.map((a, idx) => <SearchResultText key={idx} result={a} />),
                   otherNames: i.otherNames &&
-                    i.otherNames.map(o => <SearchResultText result={o} />),
+                    i.otherNames.map((o, idx) => <SearchResultText key={idx} result={o} />),
                 }} />
               </Grid>
             ))}

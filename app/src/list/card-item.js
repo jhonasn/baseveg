@@ -60,6 +60,7 @@ export default ({
   badge = true,
   isOption,
   onFavoriteChanged,
+  skipClick,
   children,
 }) => {
   const theme = useTheme()
@@ -70,6 +71,15 @@ export default ({
     const findParentButton = el => el.tagName === 'BUTTON'
       ? el
       : findParentButton(el.parentNode)
+
+    const findParentClass = (el, cl) => {
+      if (typeof el.className !== 'string') return el.parentNode
+      else if (el.className.includes(cl)) return el
+      else if (el.className.includes('MuiCardActionArea-root')) return null
+      else findParentClass(el.parentNode, cl)
+    }
+
+    if (skipClick && findParentClass(e.target, `Mui${skipClick}`)) return
 
     if (findParentButton(e.target).className.includes('MuiCardActionArea-root'))
       history.push(link)

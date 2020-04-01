@@ -33,7 +33,7 @@ export function ChipContainer ({ children }) {
   const classes = useStyles(theme)
 
   return (
-    <div className={classes.chipContainer}></div>
+    <div className={classes.chipContainer}>{children}</div>
   )
 }
 
