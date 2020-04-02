@@ -47,7 +47,7 @@ const content = {
   br: {
     title: 'Sobre o aplicativo',
     thisisan: 'Este aplicativo é um ',
-    opensource: 'programa de software livre',
+    opensource: 'software de código aberto',
     createdby: ' criado por ',
     alldata: ' Todos os dados contidos neste aplicativo foram criados por ',
     facebook: 'grupo do facebook',
