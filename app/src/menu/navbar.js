@@ -369,7 +369,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
             <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
               <InfoIcon />
             </ListItemIcon>
-            <ListItemText primary="Sobre" />
+            <ListItemText primary="Sobre" secondary="About" />
           </ListItem>
         </List>
       </Drawer>
