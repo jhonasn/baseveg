@@ -42,7 +42,7 @@ const content = {
     unsplash: 'Unsplash website',
     photosincluded: ' Those photos were included in this app in the category backgrounds.',
     photographersreference: ' Photographers reference and photos used:',
-    userdeleted: 'Usuário deletado',
+    userdeleted: 'User deleted',
   },
   br: {
     title: 'Sobre o aplicativo',
@@ -58,7 +58,7 @@ const content = {
     unsplash: 'site Unsplash',
     photosincluded: ' Estas fotos foram incluidas neste aplicativo principalmente como fundo das categorias.',
     photographersreference: ' Referência dos fotógrafos e fotos utilizadas:',
-    userdeleted: 'User deleted',
+    userdeleted: 'Usuário deletado',
   },
 }
 
