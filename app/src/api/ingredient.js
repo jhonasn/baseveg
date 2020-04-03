@@ -1,4 +1,5 @@
 import getData, { getNextItems } from '.'
+import { convertToSearchText as toSearchable } from '.'
 
 const api = {
   async _load() {
@@ -14,12 +15,12 @@ const api = {
 
   count: async () => (await api._load()).length,
 
-  searchFilter: (i, search) => i.name.includes(search) ||
-    (i.descriptionShort && i.descriptionShort.includes(search)) ||
-    (i.otherNames && i.otherNames.some(n => n.includes(search))) ||
-    (i.description && i.description.includes(search)) ||
-    (i.use && i.use.includes()) ||
-    (i.alternatives && i.alternatives.some(a => a.includes(search)))
+  searchFilter: (i, search) => toSearchable(i.name).includes(search) ||
+    (i.descriptionShort && toSearchable(i.descriptionShort).includes(search)) ||
+    (i.otherNames && i.otherNames.some(n => toSearchable(n).includes(search))) ||
+    (i.description && toSearchable(i.description).includes(search)) ||
+    (i.use && toSearchable(i.use).includes()) ||
+    (i.alternatives && i.alternatives.some(a => toSearchable(a).includes(search)))
 }
 
 export default api

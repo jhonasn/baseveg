@@ -1,4 +1,4 @@
-import { convertToSeachText } from '.'
+import { convertToSearchText } from '.'
 import categoryApi from './category'
 import itemApi from './item'
 import optionApi from './option'
@@ -11,7 +11,7 @@ const api = {
     const options = await optionApi._load()
     const ingredients = await ingredientApi._load()
 
-    const searchTerm = convertToSeachText(search)
+    const searchTerm = convertToSearchText(search)
 
     // filter for categories, items and options
     const searchOnList = list => list.filter(i =>
@@ -53,11 +53,11 @@ const api = {
 
   boldResult(searchTerm, field) {
     if (typeof field !== 'string' ||
-      !convertToSeachText(field).includes(searchTerm)) return field
+      !convertToSearchText(field).includes(searchTerm)) return field
     let result = []
     let idx = 0
 
-    for (const res of convertToSeachText(field).matchAll(new RegExp(searchTerm, 'gi'))) {
+    for (const res of convertToSearchText(field).matchAll(new RegExp(searchTerm, 'gi'))) {
       const endRes = res.index + res[0].length
       const begin = field.substring(idx, res.index)
       const end = field.substring(res.index, endRes)

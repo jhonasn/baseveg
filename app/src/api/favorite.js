@@ -41,13 +41,6 @@ const api = {
       return await store.put({ type, typeId: id, name }, true)
     } else return !(await store.delete(favorite.id), true)
   },
-
-  async query(search = '') {
-    return this.load().filter(f =>
-      (f.type === 'ingredient' && ingredientApi.searchFilter(f, search)) ||
-      (f.type !== 'ingredient' && itemApi.searchFilter(f, search))
-    )
-  }
 }
 
 export default api

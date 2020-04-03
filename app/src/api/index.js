@@ -7,7 +7,7 @@ const removeDiacritics = (text, removeSpecialChars) => {
   return newText
 }
 
-export const convertToSeachText = (text, removeSpecialChars = false) =>
+export const convertToSearchText = (text, removeSpecialChars = false) =>
   removeDiacritics(text.toLowerCase())
 
 export function getNextItems(collection, lastId, chunkSize = 20) {

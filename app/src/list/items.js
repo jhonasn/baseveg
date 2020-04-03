@@ -47,6 +47,8 @@ export default () => {
     (async () => setCategory(await categoryApi.get(categoryId)))()
     getMoreItems()
     window.scrollTo(0, 0)
+    // disable annoying react-hooks/exhaustive-deps getMoreItems as dependency
+    // eslint-disable-next-line
   }, [categoryId])
 
   if (!category) return <Loading />

@@ -1,4 +1,5 @@
 import getData, { getNextItems } from '.'
+import { convertToSearchText as toSearchable } from '.'
 
 const api = {
   loadWithObservations: (data, collection) => data[collection].map(i => ({
@@ -15,12 +16,12 @@ const api = {
   get: async id => (await api._load()).find(i => i.id === id),
 
   // valid for item and option since the model currently is the equal
-  searchFilter: (i, search) => i.name.includes(search) ||
+  searchFilter: (i, search) => toSearchable(i.name).includes(search) ||
     (i.obs && (
-      (i.obs.observations && i.obs.observations.includes(search)) ||
-      (i.obs.only && i.obs.only.includes(search)) ||
-      (i.obs.except && i.obs.except.includes(search)) ||
-      (i.obs.warning && i.obs.warning.includes(search))
+      (i.obs.observations && toSearchable(i.obs.observations).includes(search)) ||
+      (i.obs.only && toSearchable(i.obs.only).includes(search)) ||
+      (i.obs.except && toSearchable(i.obs.except).includes(search)) ||
+      (i.obs.warning && toSearchable(i.obs.warning).includes(search))
     ))
 }
 

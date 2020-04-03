@@ -72,6 +72,9 @@ export default () => {
   useEffect(() => {
     (async () => setResult(await api.query(search)))()
     window.scrollTo(0, 0)
+
+    // new search, reset result
+    return () => setResult(null)
   }, [search])
 
   useEffect(() => {
