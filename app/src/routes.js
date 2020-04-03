@@ -23,6 +23,7 @@ export const routes = ({
   about: '/about',
   search: '/search/:text',
   facebook: 'https://www.facebook.com/groups/trollajuda/',
+  facebookPage: 'https://www.facebook.com/VegAjuda/',
   github: 'https://github.com/jhonasn/vegajuda',
 })
 

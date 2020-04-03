@@ -7,6 +7,9 @@ import CardIngredient from '../ingredients/card-ingredient'
 import api from '../api/favorite'
 
 export default () => {
+  // TODO: add category in items cards and item and category in options cards
+  // TODO: add link to item in options cards
+  // TODO: add no favorites message
   const [favorites, setFavorites] = useState([])
 
   const refreshFavorites = () => {

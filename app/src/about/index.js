@@ -15,8 +15,8 @@ import { routes } from '../routes'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: 10,
-    margin: '10px 0px 5px',
+    padding: theme.spacing(2),
+    margin: `${theme.spacing(2)}px 0px`,
   },
   body: {
     marginBottom: theme.spacing(2),
@@ -62,8 +62,11 @@ const content = {
   },
 }
 
+const PICTURES_QUANTITY = 30
+
 let columnsLeft = 0
-let imagesLeft = 26
+let imagesLeft = 0
+let lastColSize = 0
 
 export default () => {
   const theme = useTheme()
@@ -75,15 +78,18 @@ export default () => {
   const getColumnSize = () => {
     let colSize = 0
     // reset images left when restart
-    if (imagesLeft === 0) imagesLeft = 26
+    if (imagesLeft === 0) imagesLeft = PICTURES_QUANTITY
 
     if (columnsLeft === 0) {
       columnsLeft = 3
-      colSize = random(1, 3)
-    } else if (columnsLeft === 1) colSize = 1
-    else colSize = random(1, 2)
+      while (colSize === lastColSize || !colSize) {
+        colSize = random(1, 3)
+      }
+      lastColSize = colSize
+    } else colSize = random(1, columnsLeft)
 
     if (imagesLeft === 1) colSize = columnsLeft
+    else if (!colSize) colSize = 1
 
     columnsLeft -= colSize
     imagesLeft--
@@ -144,6 +150,10 @@ export default () => {
           ['pintura', 'Lucas Benjamin', 'aznbokchoy', 'wQLAGv4_OYs'],
           ['livros', 'Jaredd Craig', 'jaredd_craig', 'HH4WBGNyltc'],
           ['diversos', 'Ashim D’Silva', 'randomlies', 'Kw_zQBAChws'],
+          ['favorites', 'Forest Simon', 'forest_ms', 'ZKbve9f7Mp4'],
+          ['ingredients', 'Alex Kondratiev', 'alexanderkondratiev', 'yS3XM9qx3hQ'],
+          ['announcements', 'Clem Onojeghuo', 'clemono2', 'DoA2duXyzRM'],
+          ['search', 'Dan Dimmock', 'dandimmock', 'sNwnjxm8eTY'],
         ].map(([categoryId, name, user, hash, obs]) => (
           <GridListTile key={hash} cols={getColumnSize()}>
             <img src={`${process.env.PUBLIC_URL}/img/${categoryId}.jpg`} alt={categoryId} />
@@ -152,7 +162,15 @@ export default () => {
                 {name}
                 {obs && <Typography variant="caption"> ({obs})</Typography>}
               </>}
-              subtitle={<Link href={`https://unsplash.com/@${user}`} target="_blank">@{user}</Link>}
+              subtitle={
+                <Link
+                  href={`https://unsplash.com/@${user}`}
+                  target="_blank"
+                  color="secondary"
+                >
+                  @{user}
+                </Link>
+              }
               actionIcon={
                 <IconButton
                   className={classes.icon}

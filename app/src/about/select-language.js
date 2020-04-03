@@ -9,6 +9,7 @@ const useStyles = makeStyles(theme => ({
     float: 'right',
   },
   flagButton: {
+    height: '1.5rem',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
@@ -35,14 +36,12 @@ export default function SelectLanguage({ language, onSelect }) {
         className={clsx(classes.flagButton, classes.brFlag)}
         onClick={() => onSelect('br')}
       >
-        &nbsp;
       </Button>
       <Button
         disabled={language === 'us'}
         className={clsx(classes.flagButton, classes.usFlag)}
         onClick={() => onSelect('us')}
       >
-        &nbsp;
       </Button>
     </ButtonGroup>
   )

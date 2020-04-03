@@ -5,17 +5,19 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 import WarningIcon from '@material-ui/icons/Warning'
+import Banner from '../components/banner'
 import { routes } from '../routes'
 
 const useStyles = makeStyles(theme => ({
   container: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
   paper: {
     padding: theme.spacing(2),
   },
-  title: {
-    textAlign: 'center',
+  help: {
+    fontWeight: 900,
+    marginTop: theme.spacing(2),
   },
 }))
 
@@ -25,19 +27,17 @@ export default () => {
   const classes = useStyles(theme)
 
   const content = [
-    `Verifique sempre os ingredientes/composição dos
-    produtos antes de comprá-los. Muitas empresas
-    mudam as fórmulas ao longo do tempo incluindo ou
-    retirando ingredientes de origem animal.`,
-    `Os produtos e empresas foram incluídos na lista após
-    contato prévio com os SACs e sempre de acordo com
-    as informações fornecidas pelas próprias empresas.`,
-    `Mas, como bem sabemos, as informações mudam. As
-    empresas podem ser compradas e se associar a outras
-    empresas que realizam testes em animais, passar a
-    patrocinar eventos que usem animais ou mudar os
-    ingredientes dos produtos e isso nem sempre fica
-    claro quando entramos em contato com os SACs.`,
+    `Verifique sempre os ingredientes/composição dos produtos
+    antes de comprá-los.`,
+    `Muitas empresas mudam as fórmulas ao longo do tempo incluindo
+    ou retirando ingredientes de origem animal.`,
+    `Os produtos e empresas foram incluídos na lista após contato prévio
+    com os SACs e sempre de acordo com as informações fornecidas pelas próprias
+    empresas, mas, como bem sabemos, as informações mudam.`,
+    `As empresas podem ser compradas e se associar a outras empresas que
+    realizam testes em animais, passar a patrocinar eventos que usem animais ou
+    mudar os ingredientes dos produtos e isso nem sempre fica claro quando
+    entramos em contato com os SACs.`,
     [
       `Se souber de informações contrárias a alguma empresa
       ou produto presente na lista, avise os administradores
@@ -47,32 +47,47 @@ export default () => {
       </Link>,
       ` para que a lista seja editada.`
     ],
-    `Entre também em contato com as empresas e envie as
-    respostas dos SACs para os administradores do grupo.`,
+    [
+      `A lista é colaborativa! Não viu a marca que procura na lista? Entre
+      também em contato com as empresas e envie as respostas dos SACs para os
+      administradores do grupo `,
+      <Link href={routes.facebook} target="_blank">
+        VegAjuda - Veganismo no grupo
+      </Link>,
+      ' ou ',
+      <Link href={routes.facebookPage} target="_blank">
+        na página no Facebook
+      </Link>,
+      '.'
+    ],
   ]
 
   return (
-    <Container className={classes.container}>
-      <Paper className={classes.paper}>
-        <Typography className={classes.title} gutterBottom>
-          <Typography variant="h5" color="error" component="span">
-            <WarningIcon color="secondary" /> Atenção!&nbsp;
+    <>
+      <Banner
+        title="Avisos"
+        subtitle="Atenção a essas dicas:"
+        imgName="announcements"
+        isFullWidth
+      />
+      <Container className={classes.container}>
+        <Paper className={classes.paper}>
+          {content.map(p =>
+            <Typography variant="body1" gutterBottom>
+              {typeof p === 'string' && p}
+              {Array.isArray(p) && p.map(pp => pp)}
+            </Typography>
+          )}
+          <Typography
+            variant="subtitle1"
+            color="primary"
+            className={classes.help}
+          >
+            Contamos com a ajuda de todos para que a lista cresça
+            e melhore cada vez mais!
           </Typography>
-          <Typography variant="h5" color="primary" component="span">
-            Importante! <WarningIcon color="secondary" />
-          </Typography>
-        </Typography>
-        {content.map(p =>
-          <Typography variant="body1" gutterBottom>
-            {typeof p === 'string' && p}
-            {Array.isArray(p) && p.map(pp => pp)}
-          </Typography>
-        )}
-        <Typography variant="body1" color="secondary">
-          Contamos com a ajuda de todos para que a lista cresça
-          e melhore cada vez mais!
-        </Typography>
-      </Paper>
-    </Container>
+        </Paper>
+      </Container>
+    </>
   )
 }
