@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import Drawer from '@material-ui/core/Drawer'
+import Drawer from '@material-ui/core/SwipeableDrawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
@@ -66,7 +66,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    backgroundColor: theme.palette.primary.main,
   },
   content: {
     flexGrow: 1,
@@ -100,6 +101,21 @@ const useStyles = makeStyles(theme => ({
       height: 40,
       marginRight: theme.spacing(1),
     },
+  },
+  logoDrawer: {
+    height: 50,
+  },
+  logoWordsDrawer: {
+    height: 45,
+  },
+  versionDrawer: {
+    position: 'absolute',
+    top: 39,
+    left: 20,
+    color: theme.palette.getContrastText(theme.palette.primary.main),
+  },
+  drawerCloseButton: {
+    color: theme.palette.getContrastText(theme.palette.primary.main),
   },
   titleText: {
     display: 'none',
@@ -153,8 +169,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default ({ children, isLightTheme, changeTheme }) => {
-  // TODO: implement slide to open menu, i think this can help:
-  // https://material-ui.com/pt/components/transitions/
   // TODO: implement show recents and favorites as suggestions
   const history = useHistory()
   const classes = useStyles()
@@ -162,6 +176,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [open, setOpen] = useState(false)
   const currentUrl = history.location.pathname
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
   const getSearchText = useCallback(() =>
     currentUrl.replace('/search/', ''),
@@ -255,11 +270,26 @@ export default ({ children, isLightTheme, changeTheme }) => {
         variant={isMobile ? 'temporary' : 'permanent'}
         anchor="left"
         open={open}
+        onOpen={() => setOpen(true)}
         onClose={() => setOpen(false)}
+        disableBackdropTransition={!iOS} disableDiscovery={iOS}
         classes={{ paper: classes.drawerPaper }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
+          <img
+            alt="full logo"
+            className={classes.logoDrawer}
+            src={`${process.env.PUBLIC_URL}/logo.svg`}
+          />
+          <img
+            alt="logo words"
+            className={classes.logoWordsDrawer}
+            src={`${process.env.PUBLIC_URL}/logo_words.svg`}
+          />
+          <Typography variant="caption" className={classes.versionDrawer}>
+            {process.env.REACT_APP_VERSION}
+          </Typography>
+          <IconButton className={classes.drawerCloseButton} onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
