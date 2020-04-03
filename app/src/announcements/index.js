@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default () => {
-  // TODO: use card with image to display title instead colored title
   const theme = useTheme()
   const classes = useStyles(theme)
 
