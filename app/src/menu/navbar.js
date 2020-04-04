@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
-import { makeStyles, useTheme, fade } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import Drawer from '@material-ui/core/SwipeableDrawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
-import InputBase from '@material-ui/core/InputBase'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
@@ -20,7 +19,6 @@ import LinkIcon from '@material-ui/icons/Link'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import AnnouncementIcon from '@material-ui/icons/Announcement'
 import ColorizeIcon from '@material-ui/icons/Colorize'
-import SearchIcon from '@material-ui/icons/Search'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh'
@@ -29,6 +27,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import LinkMUI from '@material-ui/core/Link'
+import SearchField from './search'
 import { routes } from '../routes'
 
 const drawerWidth = 240
@@ -123,43 +122,6 @@ const useStyles = makeStyles(theme => ({
       display: 'block',
     },
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 200,
-      },
-    },
-  },
   selectedNavItem: {
     color: theme.palette.primary.main,
   },
@@ -178,38 +140,11 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const currentUrl = history.location.pathname
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
-  const getSearchText = useCallback(() =>
-    currentUrl.replace('/search/', ''),
-  [currentUrl])
-
   const handleDrawerOpen = () => setOpen(true)
 
   const handleDrawerClose = () => setOpen(false)
 
   const handleChangeTheme = () => changeTheme(!isLightTheme)
-
-  const handleSearchFocus = e => e.target.value = ''
-
-  const handleSearchBlur = e => {
-    const searchText = getSearchText()
-    if (!e.target.value && searchText) e.target.value = getSearchText()
-  }
-
-  const handleSubmit = e => {
-    e.preventDefault()
-    history.push(routes.search.replace(':text', e.target.search.value))
-    e.target.search.blur()
-  }
-
-  useEffect(() => {
-    const isInSeachRoute = currentUrl.includes('/search/')
-    const searchText = getSearchText()
-    const searchInput = document.querySelector('input[name=search]')
-
-    if (!isInSeachRoute) searchInput.value = ''
-    else if (searchText && searchInput.value !== searchText)
-      searchInput.value = searchText
-  }, [currentUrl, getSearchText])
 
   return (
     <div className={classes.root}>
@@ -244,22 +179,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
               VegAjuda
             </Typography>
           </LinkMUI>
-          <form className={classes.search} onSubmit={handleSubmit}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Buscar..."
-              name="search"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onFocus={handleSearchFocus}
-              onBlur={handleSearchBlur}
-            />
-          </form>
+          <SearchField />
           <IconButton color="inherit" onClick={handleChangeTheme}>
             {isLightTheme ? <BrightnessHighIcon /> : <BrightnessLowIcon />}
           </IconButton>
