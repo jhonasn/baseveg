@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Snackbar from '@material-ui/core/Snackbar'
-import Slide from '@material-ui/core/Slide'
 import Loading from '../components/loading'
+import InfiniteScroll from '../components/infinite-scroll'
 import Category from './category'
 import CardItem from './card-item'
-import useInfiniteScroll from '../hooks/use-infinite-scroll'
 import api from '../api/item'
 import categoryApi from '../api/category'
 
@@ -18,30 +16,19 @@ export default () => {
   const [category, setCategory] = useState(null)
   const [items, setItems] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [isAllItemsLoaded, setIsAllItemsLoaded] = useState(false)
-  const [openAllItemsLoaded, setOpenAllItemsLoaded] = useState(false)
 
   const getMoreItems = async () => {
+    setIsLoading(true)
+
     const lastId = (items.slice().pop() || {}).id
     const nextItems = await api.loadNext(categoryId, lastId)
 
-    if (!nextItems.length) {
-      setIsAllItemsLoaded(true)
-      setOpenAllItemsLoaded(true)
-    } else {
-      setItems([...items, ...nextItems])
-    }
+    if (nextItems.length) setItems([...items, ...nextItems])
 
     setIsLoading(false)
-  }
 
-  useInfiniteScroll(() => {
-    if (!isLoading && !isAllItemsLoaded) {
-      setIsLoading(true)
-      getMoreItems()
-    } else if (isAllItemsLoaded && !openAllItemsLoaded)
-      setOpenAllItemsLoaded(true)
-  })
+    return !nextItems.length
+  }
 
   useEffect(() => {
     (async () => setCategory(await categoryApi.get(categoryId)))()
@@ -75,12 +62,9 @@ export default () => {
           ))}
         </Grid>
       </Container>
-      <Snackbar
-        open={openAllItemsLoaded}
-        onClose={() => setOpenAllItemsLoaded(false)}
-        TransitionComponent={props => <Slide {...props} direction="up" />}
-        autoHideDuration={2000}
-        message={'Fim dos items dessa categoria'}
+      <InfiniteScroll
+        onBottomReached={getMoreItems}
+        noMoreItemsMessage="Fim dos items dessa categoria"
       />
     </>
   )
