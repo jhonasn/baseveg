@@ -1,4 +1,5 @@
 import React from 'react'
+import CategoryIcon from '@material-ui/icons/Category'
 import Banner from '../components/banner'
 
 export default ({ data: c, isBanner }) => (
@@ -6,8 +7,7 @@ export default ({ data: c, isBanner }) => (
     title={c.name}
     imgName={c.id}
     link={!isBanner && `/items/${c.id}`}
-    type={'Categoria'}
+    type={<><CategoryIcon style={{ fontSize: 'inherit' }} /> Categoria</>}
     isFullWidth={isBanner}
   />
 )
-

@@ -132,6 +132,7 @@ export default function SearchField() {
           className={clsx(classes.searchIcon, classes.clearSearchIcon)}
           onClick={handleClear}
           ref={clearButton}
+          color="inherit"
         >
           <ClearIcon />
         </IconButton>

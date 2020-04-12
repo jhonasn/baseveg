@@ -9,6 +9,8 @@ import CardActions from '@material-ui/core/CardActions'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Badge from '@material-ui/core/Badge'
 import Typography from '@material-ui/core/Typography'
+import ItemIcon from '@material-ui/icons/ShoppingCart'
+import OptionIcon from '@material-ui/icons/LocalOffer'
 import red from '@material-ui/core/colors/red'
 import lightBlue from '@material-ui/core/colors/lightBlue'
 import orange from '@material-ui/core/colors/orange'
@@ -19,6 +21,9 @@ const useStyles = makeStyles(theme => ({
   card: {
     marginBottom: theme.spacing(1),
     width: '100%',
+  },
+  icon: {
+    fontSize: 'inherit',
   },
   badge: {
     width: '100%',
@@ -96,8 +101,8 @@ export default ({
         <Grid item className={classes.content}>
           <Typography variant="caption">
             {isOption
-              ? <>Marca <small>(opção)</small></>
-              : <>Produto <small>(item)</small></>
+              ? <><OptionIcon className={classes.icon} /> Marca <small>(opção)</small></>
+              : <><ItemIcon className={classes.icon} /> Produto <small>(item)</small></>
             }
           </Typography>
         </Grid>

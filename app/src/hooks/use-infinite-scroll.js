@@ -14,8 +14,6 @@ export default function useInfiniteScroll (onBottomReached) {
   useEffect(() => {
     window.addEventListener('scroll', infiniteScroll)
 
-    return () => {
-      window.removeEventListener('scroll', infiniteScroll)
-    }
+    return () => window.removeEventListener('scroll', infiniteScroll)
   }, [infiniteScroll])
 }

@@ -62,7 +62,7 @@ const content = {
   },
 }
 
-const PICTURES_QUANTITY = 30
+const PICTURES_QUANTITY = 31
 
 let columnsLeft = 0
 let imagesLeft = 0
@@ -154,6 +154,7 @@ export default () => {
           ['ingredients', 'Alex Kondratiev', 'alexanderkondratiev', 'yS3XM9qx3hQ'],
           ['announcements', 'Clem Onojeghuo', 'clemono2', 'DoA2duXyzRM'],
           ['search', 'Dan Dimmock', 'dandimmock', 'sNwnjxm8eTY'],
+          ['recent', 'Aron Visuals', 'aronvisuals', 'BXOXnQ26B7o'],
         ].map(([categoryId, name, user, hash, obs]) => (
           <GridListTile key={hash} cols={getColumnSize()}>
             <img src={`${process.env.PUBLIC_URL}/img/${categoryId}.jpg`} alt={categoryId} />

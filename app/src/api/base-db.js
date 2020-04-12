@@ -26,6 +26,7 @@ export const dbPromise = openDB(DB_NAME, DB_VERSION, {
       storeNames.favorites, defaultStoreOptions
     )
 
+    recentStore.createIndex('date', 'date')
     recentStore.createIndex('id', ['type', 'typeId'])
     favoritesStore.createIndex('id', ['type', 'typeId'])
   }
@@ -49,6 +50,10 @@ class StoreDb {
 
   async get(id) {
     return (await (await dbPromise).get(this.storeName, id)) || {}
+  }
+
+  async add(obj) {
+    return await (await dbPromise).add(this.storeName, obj)
   }
 
   async put(obj, avoidException = false) {

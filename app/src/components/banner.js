@@ -10,6 +10,7 @@ import FavoriteButton from '../favorites/button'
 
 const useStyles = makeStyles(theme => ({
   frame: {
+    display: 'grid',
     padding: theme.spacing(1, 2, 3),
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
@@ -37,10 +38,20 @@ const useStyles = makeStyles(theme => ({
   content: {
     zIndex: 0,
   },
+  bottom: {
+    flex: 1,
+  },
 }))
 
 export default function Banner({
-  title, subtitle, imgName, link, type, isFullWidth = false, favoriteOptions
+  title,
+  subtitle,
+  imgName,
+  link,
+  type,
+  isFullWidth = false,
+  favoriteOptions,
+  options,
 }) {
   // TODO: create banner images for each screen size (xs, sm, md, lg, xl)
   const theme = useTheme()
@@ -57,37 +68,61 @@ export default function Banner({
       />
       <div className={classes.overlay} />
 
-      {type &&
-        <Grid
-          container
-          direction="row"
-          justify="flex-end"
-          alignItems="flex-end"
-        >
-          <Grid item className={classes.content}>
-            <Typography variant="caption">
-              {type}
-            </Typography>
-          </Grid>
-        </Grid>
-      }
       <Grid
         container
-        direction="row"
-        justify="space-between"
-        alignItems="flex-end"
+        className={classes.bottom}
+        direction="column"
+        justify="flex-start"
+        alignItems="flex-start"
       >
-        <Grid item xs={10} className={classes.content}>
-          <Typography variant={!isFullWidth ? 'subtitle1' : 'h5'} gutterBottom>
-            {title}
-          </Typography>
-          {subtitle &&
-            <Typography variant="caption" gutterBottom>{subtitle}</Typography>
+        {type &&
+          <Grid
+            item
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="flex-end"
+          >
+            <Grid item className={classes.content}>
+              <Typography variant="caption">
+                {type}
+              </Typography>
+            </Grid>
+          </Grid>
+        }
+        <Grid
+          item
+          container
+          direction="row"
+          justify="space-between"
+          alignItems="flex-end"
+        >
+          <Grid item xs={10} className={classes.content}>
+            <Typography variant={!isFullWidth ? 'subtitle1' : 'h5'} gutterBottom>
+              {title}
+            </Typography>
+            {subtitle &&
+              <Typography variant="caption" gutterBottom>{subtitle}</Typography>
+            }
+          </Grid>
+          {favoriteOptions &&
+            <Grid item xs className={classes.content}>
+              <FavoriteButton {...favoriteOptions} />
+            </Grid>
           }
         </Grid>
-        {favoriteOptions &&
-          <Grid item xs className={classes.content}>
-            <FavoriteButton {...favoriteOptions} />
+        {options &&
+          <Grid
+            item
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="flex-end"
+            className={classes.bottom}
+          >
+            <Grid item xs={12} className={classes.content}>
+              {options}
+            </Grid>
           </Grid>
         }
       </Grid>

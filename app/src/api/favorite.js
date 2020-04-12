@@ -1,4 +1,4 @@
-import { favoritesStore as store } from './baseDb'
+import { favoritesStore as store } from './base-db'
 import itemApi from './item'
 import optionApi from './option'
 import ingredientApi from './ingredient'

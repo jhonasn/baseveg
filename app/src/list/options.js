@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
+import ItemIcon from '@material-ui/icons/ShoppingCart'
 import Loading from '../components/loading'
 import Banner from '../components/banner'
 import CardItem from './card-item'
@@ -33,7 +34,7 @@ export default () => {
         title={item.name}
         subtitle={category.name}
         imgName={category.id}
-        type={<>Produto <small>(item)</small></>}
+        type={<><ItemIcon style={{ fontSize: 'inherit' }} /> Produto <small>(item)</small></>}
         isFullWidth
         favoriteOptions={{ id: item.id, type: 'item' }}
       />

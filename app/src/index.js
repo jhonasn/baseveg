@@ -10,11 +10,15 @@ import { lightTheme, darkTheme } from './theme'
 import Menu from './menu/navbar'
 import MenuBottom from './menu/bottom'
 import * as serviceWorker from './serviceWorker'
+import useRecentRecorder from './hooks/use-recent-recorder'
 import api from './api/config'
 import 'typeface-roboto'
 
 const App = () => {
   // TODO: uglify data.json
+  // TODO: implement offline features
+  useRecentRecorder()
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 
   const [isLightTheme, setIsLightTheme] = useState(prefersDarkMode)
@@ -42,20 +46,20 @@ const App = () => {
   changeBarColor(isLightTheme)
 
   return (
-    <Router basename={`${process.env.PUBLIC_URL}/`}>
-      <ThemeProvider theme={isLightTheme ? darkTheme : lightTheme}>
-        <CssBaseline/>
-        <Menu isLightTheme={isLightTheme} changeTheme={changeTheme}>
-          <Routes />
-        </Menu>
-        <MenuBottom />
-      </ThemeProvider>
-    </Router>
+    <ThemeProvider theme={isLightTheme ? darkTheme : lightTheme}>
+      <CssBaseline/>
+      <Menu isLightTheme={isLightTheme} changeTheme={changeTheme}>
+        <Routes />
+      </Menu>
+      <MenuBottom />
+    </ThemeProvider>
   )
 }
 
 ReactDOM.render(
-  <App />,
+  <Router basename={`${process.env.PUBLIC_URL}/`}>
+    <App />
+  </Router>,
   document.getElementById('root')
 )
 

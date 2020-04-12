@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import useInfiniteScroll from '../hooks/use-infinite-scroll'
@@ -15,8 +15,8 @@ export default function InfiniteScroll({
       let allItemsLoaded = onBottomReached()
       if (allItemsLoaded instanceof Promise) allItemsLoaded = await allItemsLoaded
       if (typeof allItemsLoaded !== 'boolean') throw new Error(
-        'onBottomReached callback passed to InfiniteScroll component is not \
-        returning a boolean indicating if there are no more items to load'
+        `onBottomReached callback passed to InfiniteScroll component is not \
+        returning a boolean indicating if there are no more items to load`
       )
       if (noMoreItems !== allItemsLoaded) setNoMoreItems(allItemsLoaded)
     } else setOpenNoMoreItems(true)

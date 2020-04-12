@@ -5,19 +5,19 @@ import clsx from 'clsx'
 import debounce from 'lodash/debounce'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import Hidden from '@material-ui/core/Hidden'
 import Snackbar from '@material-ui/core/Snackbar'
 import Slide from '@material-ui/core/Slide'
 import IconButton from '@material-ui/core/IconButton'
 import InfoIcon from '@material-ui/icons/Info'
 import CloseIcon from '@material-ui/icons/Close'
+import OptionIcon from '@material-ui/icons/LocalOffer'
 import Banner from '../components/banner'
 import Category from '../list/category'
 import CardItem from '../list/card-item'
 import CardIngredient from '../ingredients/card-ingredient'
 import Loading from '../components/loading'
+import MessagePaper from '../components/message-paper'
 import Chiptip, { ChipContainer } from '../components/chiptip'
 import FavoriteButton from '../favorites/button'
 import configApi from '../api/config'
@@ -27,14 +27,14 @@ const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
   },
-  notFountPaper: {
-    padding: theme.spacing(2),
-  },
   brandsDescription: {
     display: 'block',
   },
   infoSnack: {
     backgroundColor: theme.palette.primary.main,
+  },
+  optionIcon: {
+    fontSize: 'inherit',
   },
   icon: {
     fontSize: 20,
@@ -132,7 +132,7 @@ export default () => {
                   badge={false}
                   actionsTitle={
                     i.options && i.options.length
-                      ? <>Marcas <small>(opções)</small>:</>
+                      ? <><OptionIcon className={classes.optionIcon} /> Marcas <small>(opções)</small>:</>
                       : null
                   }
                   skipClick={'Chip'}
@@ -187,13 +187,11 @@ export default () => {
             ))}
           </Grid>
         }
-        {!result.total &&
-          <Paper className={classes.notFountPaper}>
-            <Typography variant="body1">
-              Nenhum resultado encontrado na busca de "{search}"
-            </Typography>
-          </Paper>
-        }
+        {!result.total && (
+          <MessagePaper
+            message={`Nenhum resultado encontrado na busca de "${search}"`}
+          />
+        )}
         <Snackbar
           open={showEndOfItems}
           onClose={() => setShowEndOfItems(false)}

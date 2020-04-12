@@ -1,4 +1,4 @@
-import { configStore as store } from './baseDb'
+import { configStore as store } from './base-db'
 
 export default {
   getTheme: async () => (await store.get('isLightTheme')).value,

@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import Loading from '../components/loading'
+import MessagePaper from '../components/message-paper'
 import Banner from '../components/banner'
 import CardItem from '../list/card-item'
 import CardIngredient from '../ingredients/card-ingredient'
 import api from '../api/favorite'
 
-const useStyles = makeStyles(theme => ({
-  noFavorites: {
-    padding: theme.spacing(2),
-  },
-}))
-
 export default () => {
   // TODO: add category in items cards and item and category in options cards
   // TODO: add link to item in options cards
-  const theme = useTheme()
-  const classes = useStyles(theme)
-
   const [favorites, setFavorites] = useState(null)
 
   const refreshFavorites = () => {
@@ -70,13 +59,11 @@ export default () => {
                 />
               )
           ))}
-          {!favorites.length &&
-            <Paper className={classes.noFavorites}>
-              <Typography variant="body1">
-                Você não adicionou nenhum item aos seus favoritos
-              </Typography>
-            </Paper>
-          }
+          {!favorites.length && (
+            <MessagePaper
+              message="Você não adicionou nenhum item aos seus favoritos"
+            />
+          )}
         </Grid>
       </Container>
     </>
