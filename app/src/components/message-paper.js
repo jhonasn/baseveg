@@ -5,21 +5,30 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles(theme => ({
-  noFavorites: {
+  root: {
     padding: theme.spacing(2),
   },
-  marginTop: {
+  margin: {
     marginTop: theme.spacing(2),
+  },
+  rootDense: {
+    padding: theme.spacing(1),
+  },
+  marginDense: {
+    marginTop: theme.spacing(1),
   },
 }))
 
-export default function MessagePaper({ message, hasMarginTop, children }) {
+export default function MessagePaper({ message, hasMarginTop, dense, children }) {
   const theme = useTheme()
   const classes = useStyles(theme)
 
   return (
-    <Paper className={clsx(classes.noFavorites, {
-      [classes.marginTop]: hasMarginTop,
+    <Paper className={clsx({
+      [classes.root]: !dense,
+      [classes.rootDense]: dense,
+      [classes.margin]: hasMarginTop && !dense,
+      [classes.marginDense]: hasMarginTop && dense,
     })}>
       {message
         ? <Typography variant="body1">{message}</Typography>
