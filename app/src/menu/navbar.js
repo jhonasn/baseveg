@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { useHistory, Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -16,6 +16,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import ListIcon from '@material-ui/icons/List'
 import InfoIcon from '@material-ui/icons/Info'
 import LinkIcon from '@material-ui/icons/Link'
+import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import AnnouncementIcon from '@material-ui/icons/Announcement'
 import ColorizeIcon from '@material-ui/icons/Colorize'
@@ -27,7 +28,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import LinkMUI from '@material-ui/core/Link'
+import Tooltip from '@material-ui/core/Tooltip'
 import SearchField from './search'
+import InstallBanner from './install-banner'
+import { getInstallPrompt, isInApp } from '../sw'
 import { routes } from '../routes'
 
 const drawerWidth = 240
@@ -137,6 +141,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'))
   const [open, setOpen] = useState(false)
+  const [installPrompt, setInstallPrompt] = useState(null)
   const currentUrl = history.location.pathname
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
@@ -145,6 +150,47 @@ export default ({ children, isLightTheme, changeTheme }) => {
   const handleDrawerClose = () => setOpen(false)
 
   const handleChangeTheme = () => changeTheme(!isLightTheme)
+
+  const handleInstallPrompt = () => {
+    (async () => {
+      try {
+        const e = await installPrompt.prompt()
+        if (e.outcome === 'accepted') handleAppInstalled()
+      } catch (e) {
+        if (e.message.includes('app is already installed')) handleAppInstalled()
+      }
+
+      setInstallPrompt(null)
+    })()
+  }
+
+  const handleAppInstalled = () => {
+    const inApp = isInApp()
+    const isMobileOS = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    if (!inApp && isMobileOS) {
+      // wait install into device and open installed app
+      setTimeout(() => {
+        // FIXME: open on mobile and chrome not working
+        // TODO: after open close current tab
+        console.info('mobile open')
+        window.open('/vegajuda', '_blank')
+        window.close()
+      }, 2000)
+    }
+  }
+
+  useEffect(() => {
+    (async () => {
+      const promptInstall = await getInstallPrompt()
+
+      if (typeof promptInstall === 'boolean') handleAppInstalled()
+      else setInstallPrompt(promptInstall)
+    })()
+
+    window.addEventListener('appinstalled', handleAppInstalled)
+
+    return () => window.removeEventListener('appinstalled', handleAppInstalled)
+  }, [])
 
   return (
     <div className={classes.root}>
@@ -180,9 +226,13 @@ export default ({ children, isLightTheme, changeTheme }) => {
             </Typography>
           </LinkMUI>
           <SearchField />
-          <IconButton color="inherit" onClick={handleChangeTheme}>
-            {isLightTheme ? <BrightnessHighIcon /> : <BrightnessLowIcon />}
-          </IconButton>
+          {installPrompt &&
+            <Tooltip title="Instalar vegajuda">
+              <IconButton color="inherit" onClick={handleInstallPrompt}>
+                <AddToHomeScreenIcon />
+              </IconButton>
+            </Tooltip>
+          }
         </Toolbar>
       </AppBar>
       <Drawer
@@ -314,6 +364,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
             to={routes.about}
             onClick={handleDrawerClose}
             selected={currentUrl === routes.about}
+
             classes={{ selected: classes.selectedNavItem }}
           >
             <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
@@ -321,11 +372,25 @@ export default ({ children, isLightTheme, changeTheme }) => {
             </ListItemIcon>
             <ListItemText primary="Sobre" secondary="About" />
           </ListItem>
-        </List>
+          <Divider />
+          <ListItem
+            button
+            onClick={handleChangeTheme}
+          >
+            <ListItemIcon classes={{ root: classes.selectedNavIcon }}>
+              {isLightTheme ? <BrightnessHighIcon /> : <BrightnessLowIcon />}
+            </ListItemIcon>
+            <ListItemText primary={`Modo noturno ${isLightTheme ? 'ativado' : 'desativado'}`} />
+          </ListItem>
+      </List>
       </Drawer>
       <main
         className={classes.content}
       >
+        <InstallBanner
+          canInstall={installPrompt}
+          installPrompt={handleInstallPrompt}
+        />
         {children}
       </main>
     </div>

@@ -15,7 +15,10 @@ export function getNextItems(collection, lastId, chunkSize = 20) {
   return collection.slice(idx, idx + chunkSize)
 }
 
+let data = null
 export default async function getData() {
+  if (data) return data
   const response = await fetch(`${process.env.PUBLIC_URL}/data.json`)
-  return await response.json()
+  data = await response.json()
+  return data
 }

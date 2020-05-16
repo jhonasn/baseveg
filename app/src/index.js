@@ -9,7 +9,7 @@ import indigo from '@material-ui/core/colors/indigo'
 import { lightTheme, darkTheme } from './theme'
 import Menu from './menu/navbar'
 import MenuBottom from './menu/bottom'
-import * as serviceWorker from './serviceWorker'
+import * as serviceWorker from './sw'
 import useRecentRecorder from './hooks/use-recent-recorder'
 import api from './api/config'
 import 'typeface-roboto'
@@ -45,6 +45,21 @@ const App = () => {
   // set chrome bar color
   changeBarColor(isLightTheme)
 
+  // cache imgs other than categories
+  ;[
+    'announcements',
+    'favorites',
+    'search',
+    'ingredients',
+    'recent',
+    'us-flag.svg',
+    'br-flag.svg',
+  ].forEach(name => fetch(
+    `${process.env.PUBLIC_URL}/img/${
+      name.includes('.') ? name : `${name}.jpg`
+    }`
+  ))
+
   return (
     <ThemeProvider theme={isLightTheme ? darkTheme : lightTheme}>
       <CssBaseline/>
@@ -63,7 +78,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister()
+serviceWorker.register()
