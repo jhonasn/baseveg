@@ -96,7 +96,7 @@ export default function InstallBanner({
             alignItems="center"
           >
             <Typography variant="body2">
-              Instalar o vegajuda
+              Instalar Base Veg
             </Typography>
             <HeartIcon className={classes.heart} />
           </Grid>

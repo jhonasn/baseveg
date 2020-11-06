@@ -5,6 +5,8 @@ import optionApi from './option'
 import ingredientApi from './ingredient'
 
 const api = {
+  _cache: { searchTerm: null, results: null },
+
   async query(search) {
     const categories = await categoryApi.load()
     const items = await itemApi._load()
@@ -12,6 +14,13 @@ const api = {
     const ingredients = await ingredientApi._load()
 
     const searchTerm = convertToSearchText(search)
+
+    if (api._cache.searchTerm && api._cache.searchTerm === searchTerm) {
+      return api._cache.results
+    } else {
+      api._cache.searchTerm = searchTerm
+      api._cache.results = null
+    }
 
     // filter for categories, items and options
     const searchOnList = list => list.filter(i =>
@@ -21,34 +30,20 @@ const api = {
     const categoriesResult = searchOnList(categories)
     const itemsResult = searchOnList(items)
     const optionsResult = searchOnList(options)
-    const ingredientsResult = ingredients.filter(i =>
-      ingredientApi.searchFilter(i, searchTerm)
-    )
+    const ingredientsResult = searchOnList(ingredients)
 
-    // bold ingredient results
-    ingredientsResult.forEach(i => {
-      i.name = api.boldResult(search, i.name)
-      if (i.description) i.description = api.boldResult(search, i.description)
-      if (i.descriptionShort) i.descriptionShort = api.boldResult(search, i.descriptionShort)
-      if (i.use) i.use = api.boldResult(search, i.use)
-      if (i.alternatives) i.alternatives = i.alternatives.map(a =>
-        api.boldResult(search, a)
-      )
-      if (i.otherNames) i.otherNames = i.otherNames.map(o =>
-        api.boldResult(search, o)
-      )
-    })
-
-    return {
+    api._cache.results = {
       categories: api.hierarchizeAndBoldResult(searchTerm, {
         categories, items, options
       }, {
         categories: categoriesResult, items: itemsResult, options: optionsResult
       }),
-      ingredients: ingredientsResult,
+      ingredients: api.boldIngredients(searchTerm, ingredientsResult),
       total: categoriesResult.length + itemsResult.length +
         optionsResult.length + ingredientsResult.length
     }
+
+    return api._cache.results
   },
 
   boldResult(searchTerm, field) {
@@ -82,6 +77,23 @@ const api = {
       if (item.obs.except) item.obs.except = bold(searchTerm, item.obs.except)
       if (item.obs.warning) item.obs.warning = bold(searchTerm, item.obs.warning)
     }
+  },
+
+  boldIngredients(searchTerm, ingredients) {
+    return ingredients.map(i => {
+      i.name = api.boldResult(searchTerm, i.name)
+      if (i.description) i.description = api.boldResult(searchTerm, i.description)
+      if (i.descriptionShort) i.descriptionShort = api.boldResult(searchTerm, i.descriptionShort)
+      if (i.use) i.use = api.boldResult(searchTerm, i.use)
+      if (i.alternatives) i.alternatives = i.alternatives.map(a =>
+        api.boldResult(searchTerm, a)
+      )
+      if (i.otherNames) i.otherNames = i.otherNames.map(o =>
+        api.boldResult(searchTerm, o)
+      )
+
+      return i
+    })
   },
 
   hierarchizeAndBoldResult(searchTerm, collections, results) {

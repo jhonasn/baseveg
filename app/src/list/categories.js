@@ -17,8 +17,8 @@ export default () => {
   return (
     <>
       <Banner
-        title="Lista de produtos liberados do grupo Vegajuda - Veganismo"
-        imgName="vegajuda"
+        title="Lista de produtos veganos"
+        imgName="vegan"
         isFullWidth
       />
       <Container fixed>

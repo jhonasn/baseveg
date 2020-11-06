@@ -1,15 +1,15 @@
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles'
-import indigo from '@material-ui/core/colors/indigo'
+import lightBlue from '@material-ui/core/colors/lightBlue'
 import red from '@material-ui/core/colors/red'
-import lime from '@material-ui/core/colors/lime'
+import green from '@material-ui/core/colors/green'
 
 // TODO: finish save the theme selected
 export const lightTheme = responsiveFontSizes(createMuiTheme({
   palette: {
     type: 'light',
-    primary: indigo,
-    secondary: red,
-    error: lime,
+    primary: { ...lightBlue, main: '#0077cb' }, // lightBlue
+    secondary: { ...green, main: '#00af42' }, // green
+    error: red, // white #ffffff
   },
 }))
 
@@ -17,16 +17,16 @@ export const darkTheme = responsiveFontSizes(createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      dark: indigo['500'],
-      main: indigo['900'],
+      dark: lightBlue['500'],
+      main: lightBlue['900'],
     },
     secondary: {
-      dark: red['500'],
-      main: red['900'],
+      dark: green['500'],
+      main: green['900'],
     },
     error: {
-      dark: lime['500'],
-      main: lime['900'],
+      dark: red['500'],
+      main: red['900'],
     },
   },
 }))

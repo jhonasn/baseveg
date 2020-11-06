@@ -1,6 +1,6 @@
 import { openDB } from 'idb/with-async-ittr.js'
 
-const DB_NAME = 'vegajuda'
+const DB_NAME = 'baseveg'
 const DB_VERSION = 1
 
 const storeNames = {

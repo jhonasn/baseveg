@@ -173,7 +173,7 @@ export default ({ children, isLightTheme, changeTheme }) => {
         // FIXME: open on mobile and chrome not working
         // TODO: after open close current tab
         console.info('mobile open')
-        window.open('/vegajuda', '_blank')
+        window.open('/baseveg', '_blank')
         window.close()
       }, 2000)
     }
@@ -222,12 +222,12 @@ export default ({ children, isLightTheme, changeTheme }) => {
               src={`${process.env.PUBLIC_URL}/logo.svg`}
             />
             <Typography variant="h6" noWrap className={classes.titleText}>
-              VegAjuda
+              Base Veg
             </Typography>
           </LinkMUI>
           <SearchField />
           {installPrompt &&
-            <Tooltip title="Instalar vegajuda">
+            <Tooltip title="Instalar base veg">
               <IconButton color="inherit" onClick={handleInstallPrompt}>
                 <AddToHomeScreenIcon />
               </IconButton>

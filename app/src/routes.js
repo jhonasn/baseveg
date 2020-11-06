@@ -24,7 +24,7 @@ export const routes = ({
   search: '/search/:text',
   facebook: 'https://www.facebook.com/groups/trollajuda/',
   facebookPage: 'https://www.facebook.com/VegAjuda/',
-  github: 'https://github.com/jhonasn/vegajuda',
+  github: 'https://github.com/jhonasn/baseveg',
 })
 
 export default () => (

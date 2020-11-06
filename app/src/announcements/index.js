@@ -41,7 +41,7 @@ export default () => {
       ou produto presente na lista, avise os administradores
       do `,
       <Link href={routes.facebook} target="_blank">
-        VegAjuda - Veganismo
+        Base Veg
       </Link>,
       ` para que a lista seja editada.`
     ],
@@ -50,7 +50,7 @@ export default () => {
       também em contato com as empresas e envie as respostas dos SACs para os
       administradores do grupo `,
       <Link href={routes.facebook} target="_blank">
-        VegAjuda - Veganismo no grupo
+        Base Veg - grupo
       </Link>,
       ' ou ',
       <Link href={routes.facebookPage} target="_blank">
