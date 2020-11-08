@@ -40,6 +40,10 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
+  '@font-face': {
+    fontFamily: 'military',
+    src: `url(${process.env.PUBLIC_URL}/fonts/armalite.ttf)`
+  },
   appBar: {
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
@@ -108,13 +112,10 @@ const useStyles = makeStyles(theme => ({
   logoDrawer: {
     height: 50,
   },
-  logoWordsDrawer: {
-    height: 45,
-  },
   versionDrawer: {
     position: 'absolute',
     top: 39,
-    left: 20,
+    right: 5,
     color: theme.palette.getContrastText(theme.palette.primary.main),
   },
   drawerCloseButton: {
@@ -122,9 +123,16 @@ const useStyles = makeStyles(theme => ({
   },
   titleText: {
     display: 'none',
+    fontFamily: 'military',
+    fontSize: '1.6rem',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
+  },
+  titleTextDrawer: {
+    fontSize: '1.7rem',
+    color: 'white',
+    display: 'block'
   },
   selectedNavItem: {
     color: theme.palette.primary.main,
@@ -251,11 +259,9 @@ export default ({ children, isLightTheme, changeTheme }) => {
             className={classes.logoDrawer}
             src={`${process.env.PUBLIC_URL}/logo.svg`}
           />
-          <img
-            alt="logo words"
-            className={classes.logoWordsDrawer}
-            src={`${process.env.PUBLIC_URL}/logo_words.svg`}
-          />
+          <Typography variant="h6" noWrap className={clsx(classes.titleText, classes.titleTextDrawer)}>
+            Base Veg
+          </Typography>
           <Typography variant="caption" className={classes.versionDrawer}>
             {process.env.REACT_APP_VERSION}
           </Typography>
