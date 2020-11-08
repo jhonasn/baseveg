@@ -1,7 +1,7 @@
-import { favoritesStore as store } from './base-db'
-import itemApi from './item'
-import optionApi from './option'
-import ingredientApi from './ingredient'
+import { favoritesStore as store } from 'api/base-db'
+import itemApi from '../list/items/api'
+import optionApi from '../list/options/api'
+import ingredientApi from '../ingredients/api'
 
 const apis = {
   item: itemApi,

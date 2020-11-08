@@ -11,7 +11,7 @@ import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import LaunchIcon from '@material-ui/icons/Launch'
 import SelectLanguage from './select-language'
-import { routes } from '../routes'
+import { routes } from 'routes'
 
 const useStyles = makeStyles(theme => ({
   root: {

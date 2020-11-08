@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Loading from '../components/loading'
-import Banner from '../components/banner'
-import InfiniteScroll from '../components/infinite-scroll'
+import Loading from 'components/loading'
+import Banner from 'components/banner'
+import InfiniteScroll from 'components/infinite-scroll'
 import CardIngredient from './card-ingredient'
-import api from '../api/ingredient'
+import api from './api'
 
 export default () => {
   // TODO: implement search only ingredients

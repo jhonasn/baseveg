@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import FavoriteButton from '../favorites/button'
+import FavoriteButton from 'routes/favorites/button'
 
 const useStyles = makeStyles(theme => ({
   frame: {

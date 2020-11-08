@@ -1,6 +1,6 @@
 import React from 'react'
 import CategoryIcon from '@material-ui/icons/Category'
-import Banner from '../components/banner'
+import Banner from 'components/banner'
 
 export default ({ data: c, isBanner }) => (
   <Banner

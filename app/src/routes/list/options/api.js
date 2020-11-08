@@ -1,5 +1,5 @@
-import getData from '.'
-import itemApi from './item'
+import getData from 'api'
+import itemApi from '../items/api'
 
 const api = {
   _load: async () => itemApi.loadWithObservations(await getData(), 'options'),

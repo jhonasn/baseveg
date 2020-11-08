@@ -11,11 +11,11 @@ import CategoryIcon from '@material-ui/icons/Category'
 import ItemIcon from '@material-ui/icons/ShoppingCart'
 import SearchIcon from '@material-ui/icons/Search'
 import DeleteIcon from '@material-ui/icons/Delete'
-import Loading from '../components/loading'
-import MessagePaper from '../components/message-paper'
-import Banner from '../components/banner'
-import { routes } from '../routes'
-import api from '../api/recent'
+import Loading from 'components/loading'
+import MessagePaper from 'components/message-paper'
+import Banner from 'components/banner'
+import { routes } from 'routes'
+import api from './api'
 
 const useStyles = makeStyles(theme => ({
   deleteIcon: {

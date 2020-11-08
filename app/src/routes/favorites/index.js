@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Loading from '../components/loading'
-import MessagePaper from '../components/message-paper'
-import Banner from '../components/banner'
+import Loading from 'components/loading'
+import MessagePaper from 'components/message-paper'
+import Banner from 'components/banner'
 import CardItem from '../list/card-item'
 import CardIngredient from '../ingredients/card-ingredient'
-import api from '../api/favorite'
+import api from './api'
 
 export default () => {
   // TODO: add category in items cards and item and category in options cards

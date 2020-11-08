@@ -1,6 +1,6 @@
-import { recentStore as store } from './base-db'
-import categoryApi from './category'
-import itemApi from './item'
+import { recentStore as store } from 'api/base-db'
+import categoryApi from '../list/categories/api'
+import itemApi from '../list/items/api'
 
 const apis = {
   category: categoryApi,

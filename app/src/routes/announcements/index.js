@@ -4,8 +4,8 @@ import Container from '@material-ui/core/Container'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
-import Banner from '../components/banner'
-import { routes } from '../routes'
+import Banner from 'components/banner'
+import { routes } from 'routes'
 
 const useStyles = makeStyles(theme => ({
   container: {

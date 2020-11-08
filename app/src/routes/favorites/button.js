@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import DeleteIcon from '@material-ui/icons/Delete'
-import api from '../api/favorite'
+import api from './api'
 
 const useStyles = makeStyles(theme => ({
   favorite: {

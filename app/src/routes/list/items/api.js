@@ -1,5 +1,7 @@
-import getData, { getNextItems } from '.'
-import { convertToSearchText as toSearchable } from '.'
+import getData, {
+  getNextItems,
+  convertToSearchText as toSearchable
+} from 'api'
 
 const api = {
   loadWithObservations: (data, collection) => data[collection].map(i => ({

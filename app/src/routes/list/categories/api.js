@@ -1,4 +1,4 @@
-import getData from '.'
+import getData from 'api'
 
 export const api = {
   load: async () => (await getData()).categories,

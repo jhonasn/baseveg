@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import DownloadIcon from '@material-ui/icons/CloudDownload'
 import RunIcon from '@material-ui/icons/DirectionsRun'
 import BuildIcon from '@material-ui/icons/Build'
-import { routes } from '../routes'
+import { routes } from 'routes'
 
 export default () => {
   // TODO: implement download

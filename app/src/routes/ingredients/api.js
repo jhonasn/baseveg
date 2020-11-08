@@ -1,5 +1,5 @@
-import getData, { getNextItems } from '.'
-import { convertToSearchText as toSearchable } from '.'
+import getData, { getNextItems } from 'api'
+import { convertToSearchText as toSearchable } from 'api'
 
 const api = {
   async _load() {

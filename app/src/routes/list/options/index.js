@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Container from '@material-ui/core/Container'
 import ItemIcon from '@material-ui/icons/ShoppingCart'
-import Loading from '../components/loading'
-import Banner from '../components/banner'
-import CardItem from './card-item'
-import categoryApi from '../api/category'
-import itemApi from '../api/item'
-import api from '../api/option'
+import Loading from 'components/loading'
+import Banner from 'components/banner'
+import CardItem from '../card-item'
+import categoryApi from '../categories/api'
+import itemApi from '../items/api'
+import api from './api'
 
 export default () => {
   const { categoryId, itemId } = useParams()

@@ -1,8 +1,8 @@
-import { convertToSearchText } from '.'
-import categoryApi from './category'
-import itemApi from './item'
-import optionApi from './option'
-import ingredientApi from './ingredient'
+import { convertToSearchText } from 'api'
+import categoryApi from '../list/categories/api'
+import itemApi from '../list/items/api'
+import optionApi from '../list/options/api'
+import ingredientApi from '../ingredients/api'
 
 const api = {
   _cache: { searchTerm: null, results: null },

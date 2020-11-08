@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import api from '../api/recent'
+import api from 'routes/recent/api'
 
 export default function useRecentRecorder() {
   const location = useLocation()

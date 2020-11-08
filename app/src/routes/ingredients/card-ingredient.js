@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
-import Chiptip from '../components/chiptip'
+import Chiptip from 'components/chiptip'
 import FavoriteButton from '../favorites/button'
 
 const useStyles = makeStyles(theme => ({
