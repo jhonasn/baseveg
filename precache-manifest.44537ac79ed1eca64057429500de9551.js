@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "49ccbac7bbef8a7c7e2f6385c94954d2",
+    "revision": "e93e85a40fee6a56cb494581c2120bf0",
     "url": "/baseveg/index.html"
   },
   {
-    "revision": "a9a979f741187f27e4a5",
+    "revision": "d6774d23e85d044b8b66",
     "url": "/baseveg/static/css/2.fbd99fbf.chunk.css"
   },
   {
-    "revision": "a9a979f741187f27e4a5",
-    "url": "/baseveg/static/js/2.3ae44ba4.chunk.js"
+    "revision": "d6774d23e85d044b8b66",
+    "url": "/baseveg/static/js/2.f18b920f.chunk.js"
   },
   {
-    "revision": "709b0dbc81941d91b4e4",
-    "url": "/baseveg/static/js/main.e8b985a3.chunk.js"
+    "revision": "5f61e52fb95f2adb7b35",
+    "url": "/baseveg/static/js/main.8a353771.chunk.js"
   },
   {
     "revision": "108ebb7b22cbf2090f2f",

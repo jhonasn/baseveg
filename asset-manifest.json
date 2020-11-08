@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/baseveg/static/js/main.e8b985a3.chunk.js",
-    "main.js.map": "/baseveg/static/js/main.e8b985a3.chunk.js.map",
+    "main.js": "/baseveg/static/js/main.8a353771.chunk.js",
+    "main.js.map": "/baseveg/static/js/main.8a353771.chunk.js.map",
     "runtime~main.js": "/baseveg/static/js/runtime~main.620ecd8c.js",
     "runtime~main.js.map": "/baseveg/static/js/runtime~main.620ecd8c.js.map",
     "static/css/2.fbd99fbf.chunk.css": "/baseveg/static/css/2.fbd99fbf.chunk.css",
-    "static/js/2.3ae44ba4.chunk.js": "/baseveg/static/js/2.3ae44ba4.chunk.js",
-    "static/js/2.3ae44ba4.chunk.js.map": "/baseveg/static/js/2.3ae44ba4.chunk.js.map",
+    "static/js/2.f18b920f.chunk.js": "/baseveg/static/js/2.f18b920f.chunk.js",
+    "static/js/2.f18b920f.chunk.js.map": "/baseveg/static/js/2.f18b920f.chunk.js.map",
     "index.html": "/baseveg/index.html",
-    "precache-manifest.e35066a5a8c071023975e1e3870c3574.js": "/baseveg/precache-manifest.e35066a5a8c071023975e1e3870c3574.js",
+    "precache-manifest.44537ac79ed1eca64057429500de9551.js": "/baseveg/precache-manifest.44537ac79ed1eca64057429500de9551.js",
     "service-worker.js": "/baseveg/service-worker.js",
     "static/css/2.fbd99fbf.chunk.css.map": "/baseveg/static/css/2.fbd99fbf.chunk.css.map",
     "static/media/index.css": "/baseveg/static/media/roboto-latin-900italic.ebf6d164.woff2"
