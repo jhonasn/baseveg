@@ -6,7 +6,7 @@ import Loading from 'components/loading'
 import InfiniteScroll from 'components/infinite-scroll'
 import Category from '../category'
 import CardItem from '../card-item'
-import api from 'api'
+import api from './api'
 import categoryApi from '../categories/api'
 
 export default () => {
