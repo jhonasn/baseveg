@@ -1,20 +1,27 @@
 import { writeFileSync as write } from 'fs'
-import { nextStep, clearAccumulator } from './index.js'
+import { nextStep } from './index.js'
 
 export const categories = []
 let lastParent = null
+let isIgnoring = false
 
-export default (accumulator, isLineEnd, x) => {
-  if (accumulator.match(/\.+\d+/) && isLineEnd) {
-    const rgx = /.*(?=(?<=[a-z]|\)|\ )\.+\d+)/
-    let name = accumulator.match(rgx)[0].trim()
+export default (text, x) => {
+  if (!isIgnoring) {
+    let name = text.replace(/\t/g, ' ').trim()
     const fixings = name.match(/[a-z][A-Z]/g) || []
     fixings.forEach(fix => {
       const i = name.indexOf(fix) + 1
-      if (i) name = name.substring(0, i)
-        .concat(' ')
-        .concat(name.substring(i))
+      if (i) {
+        name = name.substring(0, i)
+          .concat(' ')
+          .concat(name.substring(i))
+      }
     })
+
+    // fix over a randon number in the page
+    if (name.match(/\d+|Observações/)) {
+      return
+    }
 
     const category = { name }
 
@@ -25,18 +32,20 @@ export default (accumulator, isLineEnd, x) => {
     // remove accents, diacritics and commas
     const id = category.name.toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\,/g, '')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/,/g, '')
+      // eslint-disable-next-line
       .split(' ')
     if (!id[0].includes('produto')) category.id = id[0]
     else if (!id[1].includes('para')) category.id = id[1]
     else category.id = id[2]
 
     categories.push(category)
-    clearAccumulator()
+
+    if (category.id === 'diversos') isIgnoring = true
   }
 
-  if (accumulator.match(/OBSERVAÇÕES.*PRODUTOS.*\*/)) {
+  if (text.match(/OBSERVAÇÕES.*PRODUTOS.*\*/)) {
     write('./categories.json', JSON.stringify(categories, 1, 2))
     nextStep()
   }

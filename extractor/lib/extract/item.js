@@ -1,65 +1,67 @@
 import { writeFileSync as write } from 'fs'
-import { nextStep, clearAccumulator } from './index.js'
+import { nextStep } from './index.js'
 import { categories } from './category.js'
 import { textFixings } from './utils.js'
 
 export let items = []
 export let options = []
 const columns = [
-  2.5, // item
-  11.9, // option 1
-  21.6, // option 2
-  31.3, // option 3
-  40.8 // option 4
+  1.512, // start option 1
+  9.778, // start option 2
+  17.862, // start option 3
+  26.129, // start option 4
+  33.756, // start option 5
+  41.469 // end option 5
 ]
 let categoryId = null
-let currentColumn = 0
 let currentLine = 0
-let lastItemLine = 0
 let itemId = 0
 let optionId = 0
 
-export default (accumulator, isLineEnd, x, y, nextLines) => {
+export default ({ t: text, x, s, b, i }, isLineEnd, nextLineText) => {
   if (isLineEnd) currentLine++
-  if (y <= 4) return
 
-  // header
-  const line = accumulator.concat(nextLines).trim()
-  if (findCategory(line) && line.match(/ITEM/)) {
+  const isItem = s > 22 && i
+  const isCategory = (s > 34 && i) || (s > 19 && b)
+
+  // is option line or blank option
+  if (text.match(/Opção.*\d/) || text.match(/\/+/)) {
+    if (isLineEnd) currentLine++
+    return
+  }
+
+  // category
+  // workaroud difference in index naming
+  const isFirstCategory = text.match(/Produtos.alimentícios.e.bebidas/)
+  const category = findCategory(text)
+  if (isFirstCategory || (isCategory && category)) {
+    if (isFirstCategory) categoryId = categories[0].id
     // category change
-    if (accumulator.match(/ITEM.*Opção.*1.*Opção.*2.*Opção.*3.*Opção.*4/) &&
-    isLineEnd) {
-      categoryId = findCategory(accumulator).id
-      clearAccumulator()
-      return
-    }
+    else if (isCategory && isLineEnd) categoryId = category.id
     return
   }
 
   // item
-  let currentItem = items.slice().pop()
-  if (x > columns[0] && x < columns[1]) {
-    if (currentLine !== lastItemLine)
-      items.push({ id: ++itemId, name: accumulator, categoryId })
-    else currentItem.name += accumulator
+  if (isItem && nextLineText && nextLineText.includes('Opção')) {
+    items.push({ id: ++itemId, name: text, categoryId })
 
-    currentColumn = 0
-    lastItemLine = currentLine
-    clearAccumulator()
+    currentLine++
     return
   }
 
   // options
-  const column = columns.find((c, i) => x > c && x < (columns[i + 1] || 200))
+  const column = columns.find((c, i) => x >= c && x < (columns[i + 1] || 200))
   const index = columns.indexOf(column)
-  if (index > currentColumn) {
-    currentColumn = index
-    options.push({ id: ++optionId, name: accumulator, itemId: itemId })
-  } else {
-    const currentOption = options.slice().pop()
-    currentOption.name += accumulator
-  }
-  clearAccumulator()
+  const option = options.find(o => o.line === currentLine && o.column === index)
+  if (!option) {
+    options.push({
+      id: ++optionId,
+      name: text,
+      itemId: itemId,
+      line: currentLine,
+      column: index
+    })
+  } else option.name += text
 }
 
 export const finalizeItems = () => {
@@ -83,7 +85,9 @@ const adjustItems = () => {
       isItemAdd = true
     } else if (i.id !== item.id) {
       // group item name, so bring options from the current item
-      options.filter(o => o.itemId === i.id).forEach(o => o.itemId = item.id)
+      options.filter(o => o.itemId === i.id).forEach(o => {
+        o.itemId = item.id
+      })
     }
 
     item.optionsCount = options.filter(o => o.itemId === item.id).length
@@ -96,7 +100,11 @@ const adjustItems = () => {
 }
 
 const adjustOptions = () =>
-  options.map(o => ({ ...o, name: textFixings(o.name) }))
+  options.map(o => {
+    delete o.line
+    delete o.column
+    return { ...o, name: textFixings(o.name) }
+  })
     .filter(o => o.name.length > 1)
     .map(addObservation)
 
@@ -114,7 +122,7 @@ const addObservation = item => {
       new RegExp(`${rgxId}(\\ )?-.*quais.*produtos.*(não)?.*são.*liberados`, 'i'),
       new RegExp(`${rgxId}(\\ )?-.*quais.*são.*os.*produtos.*liberados`, 'i'),
       new RegExp(`(\\ )?-(\\ )?${rgxId}`, 'i'),
-      new RegExp(rgxId),
+      new RegExp(rgxId)
     ]
     const rgx = removePhrases.find(rgx => item.name.match(rgx))
     item.name = item.name.replace(item.name.match(rgx)[0], '').trim()
@@ -125,14 +133,14 @@ const addObservation = item => {
   } else return item
 }
 
-const findCategory = accumulator => categories.find(c =>
-  accumulator.match(
-    new RegExp(`^${c.name.replace(/\ /g, '.*')}`)
+const findCategory = text => categories.find(c =>
+  text.toLowerCase().match(
+    new RegExp(`^${c.name.toLowerCase().replace(/ /g, '.*')}`)
   )
-);
+)
 
 const removeRoman = text => {
-  let result = text.trim().match(/[IVXLCDM]+$/)
+  const result = text.trim().match(/[IVXLCDM]+$/)
   if (result) return text.substring(0, result.index).trim()
   else return text
 }

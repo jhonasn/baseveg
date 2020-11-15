@@ -14,12 +14,12 @@ export default () => {
 
   const data = {
     rev: (new Date()).toLocaleDateString(),
-    categories: categories,
+    categories,
     items,
     options,
     observations,
     fonts,
-    ingredients,
+    ingredients
   }
 
   console.info('saving...')
@@ -41,7 +41,7 @@ const getIngredients = () => {
     type,
     name: i,
     descriptionShort: ingredients[type].descriptionShort,
-    fontId: ingredients[type].fontId,
+    fontId: ingredients[type].fontId
   })
 
   let id = 0
@@ -56,26 +56,4 @@ const getIngredients = () => {
   }))
 
   return { ingredients: data, fonts: ingredients.fonts }
-}
-
-const mapItem = ({ name, obsId, options }) => {
-  let result = { name, options }
-
-  // add obs
-  if (obsId) result = addObs(obsId, result)
-
-  // add obs to options
-  result.options = result.options.map(o => {
-    const option = addObs(o.obsId, o)
-    delete option.obsId
-    return option
-  })
-
-  return result
-}
-
-const addObs = (id, obj) => {
-  const obs = { ...observations.find(o => o.id === id) }
-  delete obs.id
-  return { ...obj, ...obs }
 }

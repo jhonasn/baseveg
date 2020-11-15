@@ -1,55 +1,53 @@
 import { writeFileSync as write } from 'fs'
-import { nextStep, clearAccumulator } from './index.js'
-import { categories } from './category.js'
+import { nextStep } from './index.js'
 import { textFixings } from './utils.js'
 
 export let observations = []
 let obsId = 0
 
-export default (accumulator, isLineEnd, nextLines) => {
-  if (isLineEnd) {
-    const regexFilter = [
-      // removes id and brand
-      /(?<=\*\(\d+\).*\-\ ).*/,
-      /(?<=\*\(\d+\).*\-).*/,
-      /(?<=\*\(\d+\).*\:\ ).*/,
-      /(?<=\*\(\d+\).*\:).*/,
-      // removes id
-      /(?<=\*\(\d+\)\ ).*/,
-      /(?<=\*\(\d+\)).*/,
-    ]
-    const rgxId = /(?<=\*\()\d+/
-
-    const id = rgxId.test(accumulator) &&
-      Number(accumulator.match(rgxId)[0])
-
-    let obs = null
-    regexFilter.find(r => obs = accumulator.match(r))
-    if (obs) obs = obs[0]
-
-    if (!obs && id || accumulator.length < 4) return
-    else if (!obs) obs = accumulator
-
-    if (id && id > obsId) {
-      obsId = id
-      observations.push({ id, values: [ obs ] })
-    } else {
-      const observation = observations.find(
-        ({ id: oid }) => oid === obsId
-      )
-      observation.values.push(obs)
-    }
-
-    clearAccumulator()
-  }
-
-  const rgx = categories[0].name.replace(/\ /g, '.*')
-  if (nextLines.match(new RegExp(rgx))) {
+export default (text, nextLineText) => {
+  if (nextLineText.match(/Produtos.alimentícios.e.bebidas.não.alcoólicas/g)) {
     observations = adjustObservations()
     write('./observations.json', JSON.stringify(observations, 1, 2))
     nextStep()
+    return
   }
-};
+
+  const regexFilter = [
+    // removes id and brand
+    /(?<=\*\(\d+\).*- ).*/,
+    /(?<=\*\(\d+\).*-).*/,
+    /(?<=\*\(\d+\).*: ).*/,
+    /(?<=\*\(\d+\).*:).*/,
+    // removes id
+    /(?<=\*\(\d+\) ).*/,
+    /(?<=\*\(\d+\)).*/
+  ]
+  const rgxId = /(?<=\*\()\d+/
+
+  const id = rgxId.test(text) &&
+    Number(text.match(rgxId)[0])
+
+  let obs = null
+  regexFilter.find(r => {
+    obs = text.match(r)
+    return obs
+  })
+  if (obs) obs = obs[0]
+
+  if (!obs && (id || text.length < 4)) return
+  else if (!obs) obs = text
+
+  if (id && id > obsId) {
+    obsId = id
+    observations.push({ id, values: [obs] })
+  } else {
+    const observation = observations.find(
+      ({ id: oid }) => oid === obsId
+    )
+    if (observation) observation.values.push(obs)
+  }
+}
 
 // adjust observations spreading warnings, only and except
 const adjustObservations = () => {
@@ -108,7 +106,7 @@ const adjustObservations = () => {
       observations: textFixings(values),
       warnings: textFixings(warnings),
       only: textFixings(only),
-      except: textFixings(except),
+      except: textFixings(except)
     })
   })
 }

@@ -1,5 +1,5 @@
 [ ] implement search infinite scroll
-[ ] change extractor to generate new data
+[x] change extractor to generate new data
 [ ] implement graphql
 [ ] implement authentication
 [ ] design database

@@ -1,14 +1,14 @@
 import {
-    readFileSync as read,
-    writeFileSync as write,
-    existsSync as exists
+  readFileSync as read,
+  writeFileSync as write,
+  existsSync as exists
 } from 'fs'
 import { basename, extname } from 'path'
 import PdfParser from 'pdf2json'
 import { prepareData } from './extract/prepare.js'
 
 export default async () => {
-  const [,,path] = process.argv
+  const [,, path] = process.argv
 
   if (!path || !extname(path).includes('pdf') || !exists(path)) {
     console.warn('Inform a pdf file!')
@@ -21,10 +21,10 @@ export default async () => {
     return JSON.parse(read(pathCacheFile))
   } else console.info('Analysing file: ', path)
 
-  const getPdfDataAsync = () => new Promise((res, rej) => {
+  const getPdfDataAsync = () => new Promise((resolve, reject) => {
     const parser = new PdfParser()
     parser.loadPDF(path)
-    parser.on('pdfParser_dataReady', data => res(data))
+    parser.on('pdfParser_dataReady', data => resolve(data))
   })
   const data = await getPdfDataAsync()
 
